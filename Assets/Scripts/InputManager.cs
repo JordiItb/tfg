@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-
+    
     PlayerControls playerControls;
     AnimatorManager animatorManager;
-
+    
     public Vector2 movementInput;
     public Vector2 cameraInput;
     public float isRunning;
+    public float isCrouching;
 
-    public float cameraInputX;
-    public float cameraInputY;
+    [HideInInspector] public float cameraInputX;
+    [HideInInspector] public float cameraInputY;
 
-    public float moveAmount;
-    public float verticalInput;
-    public float horizontalInput;
+    [HideInInspector] public float moveAmount;
+    [HideInInspector] public float verticalInput;
+    [HideInInspector] public float horizontalInput;
 
     private void Awake(){
         
@@ -28,6 +29,7 @@ public class InputManager : MonoBehaviour
     private void Start(){
 
         isRunning = 0;
+        isCrouching = 0;
 
     }
 
@@ -37,9 +39,12 @@ public class InputManager : MonoBehaviour
 
             playerControls = new PlayerControls();
 
+            //If action is performed -> assign the value to "i" -> assign the "i" value to a script variable.
+
             playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>(); //Records movement when WASD is pressed.
             playerControls.PlayerMovement.Camera.performed += i => cameraInput = i.ReadValue<Vector2>(); //Records mouse movement.
             playerControls.PlayerMovement.Running.performed += i => isRunning = i.ReadValue<float>(); //Records if player is running.
+            playerControls.PlayerMovement.Crouch.performed += i  => isCrouching = i.ReadValue<float>(); //Records if player is crouching.
 
         }
 
@@ -61,26 +66,54 @@ public class InputManager : MonoBehaviour
 
     private void HandleMovementInput(){
 
-        if(isRunning == 1){
+        /// IMPORTANT /// Crouching has priority over running.
+
+        if(isRunning == 1 && isCrouching == 0f){
+
+            //If running == 1 -> Is running.
 
             verticalInput = movementInput.y;
             horizontalInput = movementInput.x;
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
-            animatorManager.UpdateAnimatorValues(0, moveAmount);
+            animatorManager.UpdateAnimatorValues(0, moveAmount, false);
 
-        }else{
+        }else if(isRunning == 0 && isCrouching == 0f){
+
+            //If running == 0 -> Is walking.
 
             verticalInput = movementInput.y / 2f;
             horizontalInput = movementInput.x / 2f;
             moveAmount = (Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput))) / 2f;
-            animatorManager.UpdateAnimatorValues(0, moveAmount);
+            animatorManager.UpdateAnimatorValues(0, moveAmount, false);
 
         }
 
+        if(isRunning == 0f && isCrouching == 1f){
+
+            //If running = 0 and crouching = 1 -> Is crouching.
+
+            verticalInput = movementInput.y;
+            horizontalInput = movementInput.x;
+            moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
+            animatorManager.UpdateAnimatorValues(0, moveAmount, true);
+            
+        }
+
+        if(isRunning == 1f && isCrouching == 1f){
+
+            //If running = 1 and crouching = 1 -> Is crouching.
+            
+            verticalInput = movementInput.y;
+            horizontalInput = movementInput.x;
+            moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
+            animatorManager.UpdateAnimatorValues(0, moveAmount, true);
+
+        }
+
+        //Mouse inputs for camera
+
         cameraInputX = cameraInput.x;
         cameraInputY = cameraInput.y;
-
-        
 
     }
 }

@@ -41,6 +41,38 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""d2be6b0f-c820-40be-b285-e8a2023df63c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Concentrate"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""108eb958-524c-410f-9a30-4a5a197763ae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""5ce28a28-dcb1-46ca-b44d-261bd08928e3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Teleport"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""5dba4763-1cdc-4b82-9497-739fa00e6448"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -241,6 +273,72 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Running"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""276da0d9-ba78-4fe9-8172-e4fcb588f6fe"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""57b5a077-c0bf-4825-a578-1395c1b426dc"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Concentrate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45afcae2-f8ab-43bd-badc-e58eb787919a"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Concentrate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fc7ba93e-f556-4712-8c21-6e23a172a6a5"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""231c00dc-8e51-4a5f-9d8b-b86e9a5d2341"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d45539ef-80ff-44ad-b123-a8468066250c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Teleport"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -252,6 +350,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerMovement_Movement = m_PlayerMovement.FindAction("Movement", throwIfNotFound: true);
         m_PlayerMovement_Camera = m_PlayerMovement.FindAction("Camera", throwIfNotFound: true);
         m_PlayerMovement_Running = m_PlayerMovement.FindAction("Running", throwIfNotFound: true);
+        m_PlayerMovement_Crouch = m_PlayerMovement.FindAction("Crouch", throwIfNotFound: true);
+        m_PlayerMovement_Concentrate = m_PlayerMovement.FindAction("Concentrate", throwIfNotFound: true);
+        m_PlayerMovement_Grab = m_PlayerMovement.FindAction("Grab", throwIfNotFound: true);
+        m_PlayerMovement_Teleport = m_PlayerMovement.FindAction("Teleport", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -304,6 +406,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerMovement_Movement;
     private readonly InputAction m_PlayerMovement_Camera;
     private readonly InputAction m_PlayerMovement_Running;
+    private readonly InputAction m_PlayerMovement_Crouch;
+    private readonly InputAction m_PlayerMovement_Concentrate;
+    private readonly InputAction m_PlayerMovement_Grab;
+    private readonly InputAction m_PlayerMovement_Teleport;
     public struct PlayerMovementActions
     {
         private @PlayerControls m_Wrapper;
@@ -311,6 +417,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Movement => m_Wrapper.m_PlayerMovement_Movement;
         public InputAction @Camera => m_Wrapper.m_PlayerMovement_Camera;
         public InputAction @Running => m_Wrapper.m_PlayerMovement_Running;
+        public InputAction @Crouch => m_Wrapper.m_PlayerMovement_Crouch;
+        public InputAction @Concentrate => m_Wrapper.m_PlayerMovement_Concentrate;
+        public InputAction @Grab => m_Wrapper.m_PlayerMovement_Grab;
+        public InputAction @Teleport => m_Wrapper.m_PlayerMovement_Teleport;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -329,6 +439,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Running.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnRunning;
                 @Running.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnRunning;
                 @Running.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnRunning;
+                @Crouch.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnCrouch;
+                @Crouch.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnCrouch;
+                @Crouch.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnCrouch;
+                @Concentrate.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnConcentrate;
+                @Concentrate.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnConcentrate;
+                @Concentrate.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnConcentrate;
+                @Grab.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnGrab;
+                @Grab.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnGrab;
+                @Grab.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnGrab;
+                @Teleport.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
+                @Teleport.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
+                @Teleport.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
             }
             m_Wrapper.m_PlayerMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -342,6 +464,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Running.started += instance.OnRunning;
                 @Running.performed += instance.OnRunning;
                 @Running.canceled += instance.OnRunning;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
+                @Concentrate.started += instance.OnConcentrate;
+                @Concentrate.performed += instance.OnConcentrate;
+                @Concentrate.canceled += instance.OnConcentrate;
+                @Grab.started += instance.OnGrab;
+                @Grab.performed += instance.OnGrab;
+                @Grab.canceled += instance.OnGrab;
+                @Teleport.started += instance.OnTeleport;
+                @Teleport.performed += instance.OnTeleport;
+                @Teleport.canceled += instance.OnTeleport;
             }
         }
     }
@@ -351,5 +485,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
         void OnRunning(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
+        void OnConcentrate(InputAction.CallbackContext context);
+        void OnGrab(InputAction.CallbackContext context);
+        void OnTeleport(InputAction.CallbackContext context);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     InputManager inputManager;
-
+    [Header("Positions")]
     public Transform targetTransform; //The object the camera will follow.
     public Transform cameraPivot; //The object the camera uses to pivot.
     public Transform cameraTransform;
@@ -13,18 +13,19 @@ public class CameraManager : MonoBehaviour
     private Vector3 cameraFollowVelocity = Vector3.zero;
     public LayerMask collisionLayers; //The layers the camera will collide with.
     private Vector3 cameraVectorPosition;
-
-    public float cameraCollisionOffSet = 0.2f; //How much the camera will jump off of objects its colliding with.
-    public float minimumCollisionOffSet = 0.2f;
-    public float cameraCollisionRadius = 0.2f;
-    public float cameraFollowSpeed = 0.2f;
-    public float cameraLookSpeed = 2f;
-    public float cameraPivotSpeed = 2f;
-
-    public float lookAngle; //Camera looking up and down.
-    public float pivotAngle; //Camera looking left and right.
-    public float minimumPivotAngle = -35f;
-    public float maximumPivotAngle = 35f;
+    [Header("Off sets")]
+    [Range(0, 1)] public float cameraCollisionOffSet; //How much the camera will jump off of objects its colliding with.
+    [Range(0, 1)] public float minimumCollisionOffSet;
+    [Range(0, 1)] public float cameraCollisionRadius;
+    [Header("Camera speed")]
+    [Range(0, 1)] public float cameraFollowSpeed;
+    [Range(0, 1)] public float cameraLookSpeed;
+    [Range(0, 1)] public float cameraPivotSpeed;
+    private float lookAngle; //Camera looking up and down.
+    private float pivotAngle; //Camera looking left and right.
+    [Header("Angles")]
+    public float minimumPivotAngle;
+    public float maximumPivotAngle;
 
 
     private void Awake(){
