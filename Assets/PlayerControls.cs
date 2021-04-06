@@ -73,6 +73,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Wave"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""3f19eff0-a5e5-4568-9f42-7fba3481882f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -339,6 +347,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Teleport"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a6ee8689-c25d-4043-a881-addd534fe007"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Wave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -354,6 +373,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerMovement_Concentrate = m_PlayerMovement.FindAction("Concentrate", throwIfNotFound: true);
         m_PlayerMovement_Grab = m_PlayerMovement.FindAction("Grab", throwIfNotFound: true);
         m_PlayerMovement_Teleport = m_PlayerMovement.FindAction("Teleport", throwIfNotFound: true);
+        m_PlayerMovement_Wave = m_PlayerMovement.FindAction("Wave", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -410,6 +430,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerMovement_Concentrate;
     private readonly InputAction m_PlayerMovement_Grab;
     private readonly InputAction m_PlayerMovement_Teleport;
+    private readonly InputAction m_PlayerMovement_Wave;
     public struct PlayerMovementActions
     {
         private @PlayerControls m_Wrapper;
@@ -421,6 +442,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Concentrate => m_Wrapper.m_PlayerMovement_Concentrate;
         public InputAction @Grab => m_Wrapper.m_PlayerMovement_Grab;
         public InputAction @Teleport => m_Wrapper.m_PlayerMovement_Teleport;
+        public InputAction @Wave => m_Wrapper.m_PlayerMovement_Wave;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -451,6 +473,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Teleport.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
                 @Teleport.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
                 @Teleport.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
+                @Wave.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
+                @Wave.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
+                @Wave.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
             }
             m_Wrapper.m_PlayerMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -476,6 +501,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Teleport.started += instance.OnTeleport;
                 @Teleport.performed += instance.OnTeleport;
                 @Teleport.canceled += instance.OnTeleport;
+                @Wave.started += instance.OnWave;
+                @Wave.performed += instance.OnWave;
+                @Wave.canceled += instance.OnWave;
             }
         }
     }
@@ -489,5 +517,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnConcentrate(InputAction.CallbackContext context);
         void OnGrab(InputAction.CallbackContext context);
         void OnTeleport(InputAction.CallbackContext context);
+        void OnWave(InputAction.CallbackContext context);
     }
 }

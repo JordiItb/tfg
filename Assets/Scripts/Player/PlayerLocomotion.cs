@@ -27,17 +27,18 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Slope And Stair Movement")]
     [Range(0,10)] public float slopeRadius;
     public float downSlopeForce;
-    public Transform stepUp;
-    public Transform stepLow;
-    public float stepSmooth;
-    [Range(0,1)] public float upperLength;
-    [Range(0,1)] public float lowerLength;
+
+    [Header("Colliders")]
+    public CapsuleCollider normalCollider;
+    public CapsuleCollider crouchCollider;
 
     private void Awake(){
 
         inputManager = GetComponent<InputManager>();
         rb = GetComponent<Rigidbody>();
         cameraObject = Camera.main.transform;
+        normalCollider.enabled = true;
+        crouchCollider.enabled = false;
 
     }
 
@@ -54,10 +55,12 @@ public class PlayerLocomotion : MonoBehaviour
 
         if(!isGrounded && !OnSlope()){
             //Normal fall.
-            rb.velocity = rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f, moveDirection.z);
+            rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f, moveDirection.z);
         }else if(!isGrounded && OnSlope()){
             //Slope fall (augmented fall in order for player to not "bounce" while falling).
-            rb.velocity = rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f * downSlopeForce, moveDirection.z);
+            rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f * downSlopeForce, moveDirection.z);
+        }else if(inputManager.isConcentrating == 1){
+            rb.velocity = Vector3.zero;
         }
         else{
             #region Player Movement Calculation.
@@ -66,14 +69,20 @@ public class PlayerLocomotion : MonoBehaviour
                 moveDirection.Normalize(); //Changes vector length to 1 (0 if it's too small).
                 moveDirection.y = 0;
 
-                if(inputManager.isRunning == 1f && inputManager.isCrouching == 0f){
+                if(inputManager.isRunning == 1f && inputManager.isCrouching == 0f && inputManager.isConcentrating == 0f){
                     moveDirection = moveDirection * runningSpeed; //Running.
+                    normalCollider.enabled = true;
+                    crouchCollider.enabled = false;
                 }
-                if(inputManager.isRunning == 0f && inputManager.isCrouching == 0f){
+                if(inputManager.isRunning == 0f && inputManager.isCrouching == 0f  && inputManager.isConcentrating == 0f){
                     moveDirection = moveDirection * walkingSpeed; //Walking.
+                    normalCollider.enabled = true;
+                    crouchCollider.enabled = false;
                 }
-                if(inputManager.isCrouching == 1f && inputManager.isRunning == 0f || inputManager.isRunning == 1f){
+                if(inputManager.isCrouching == 1f && inputManager.isRunning == 0f  && inputManager.isConcentrating == 0f || inputManager.isRunning == 1f){
                     moveDirection = moveDirection * crouchingSpeed; //Crouching.
+                    crouchCollider.enabled = true;
+                    normalCollider.enabled = false;
                 }
                 
                 Vector3 movementVelocity = moveDirection;
@@ -81,46 +90,7 @@ public class PlayerLocomotion : MonoBehaviour
             rb.velocity = movementVelocity; //Moves player according to the calculation above.
         }
 
-        #region Stair Movement Handler.
-            if(!OnSlope()){
-                RaycastHit hitLower;
-                //If colliding with anything.
-                if(Physics.Raycast(stepLow.position, transform.TransformDirection(Vector3.forward), out hitLower, lowerLength)){
-                    RaycastHit hitUpper;
-                    //If the object we collide with is not too tall.
-                    if(!Physics.Raycast(stepUp.position, transform.TransformDirection(Vector3.forward), out hitUpper, upperLength)){
-                        rb.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                    }
-                }
-
-                //Above code will not detect if player is colliding a stair through an angle (walking in diagonal).
-                //Below code needed to fix that.
-
-                RaycastHit hitLower45;
-                //If colliding with anything at +45.
-                if(Physics.Raycast(stepLow.position, transform.TransformDirection(1.5f, 0f, 1f), out hitLower45, lowerLength)){
-                    RaycastHit hitUpper45;
-                    //If the object we collide with is not too tall.
-                    if(!Physics.Raycast(stepUp.position, transform.TransformDirection(1.5f, 0f, 1f), out hitUpper45, upperLength)){
-                        rb.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                    }
-                }
-
-                RaycastHit hitLowerMinus45;
-                //If colliding with anything at -45.
-                if(Physics.Raycast(stepLow.position, transform.TransformDirection(-1.5f, 0f, 1f), out hitLowerMinus45, lowerLength)){
-                    RaycastHit hitUpperMinus45;
-                    //If the object we collide with is not too tall.
-                    if(!Physics.Raycast(stepUp.position, transform.TransformDirection(-1.5f, 0f, 1f), out hitUpperMinus45, upperLength)){
-                        rb.position += new Vector3(0f, stepSmooth * Time.deltaTime, 0f);
-                    }
-                }
-            }
-        #endregion
-
     }
-
-    //Slope check method. Returns true if the normal of the raycast is different from 1 (surface is tilted).
     private bool OnSlope(){
 
         RaycastHit hit;
@@ -136,6 +106,7 @@ public class PlayerLocomotion : MonoBehaviour
     private void HandleRotation(){
 
         #region Player Rotation Calculation.
+            
             Vector3 targetDirection = Vector3.zero;
 
             targetDirection = cameraObject.forward * inputManager.verticalInput; //Rotates the player the direction the camera is facing.

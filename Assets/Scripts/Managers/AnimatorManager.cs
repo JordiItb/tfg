@@ -15,7 +15,7 @@ public class AnimatorManager : MonoBehaviour
 
     }
 
-    public void UpdateAnimatorValues(float horizontalMovement, float verticalMovement, bool isCrouching){
+    public void UpdateAnimatorValues(float horizontalMovement, float verticalMovement, bool isCrouching, bool isConcentrating){
 
         //Animation Snapping (smooth transition between blend trees's states).
         float snpapedHorizontal;
@@ -58,7 +58,10 @@ public class AnimatorManager : MonoBehaviour
 
         animator.SetFloat(horizontal, snpapedHorizontal, 0.1f, Time.deltaTime);
         animator.SetFloat(vertical, snappedVertical, 0.1f, Time.deltaTime);
+
         animator.SetBool("isCrouching", isCrouching);
+
+        animator.SetBool("isConcentrating", isConcentrating);
 
     }
 }

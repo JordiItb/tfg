@@ -7,6 +7,8 @@ public class CameraManager : MonoBehaviour
     InputManager inputManager;
     [Header("Positions")]
     public Transform targetTransform; //The object the camera will follow.
+    public Transform cameraConcentrate; //The point the camera will go when concentrating.
+    private Transform auxTrans; //Auxiliar transform to switch between concentration camera position and normal camera position.
     public Transform cameraPivot; //The object the camera uses to pivot.
     public Transform cameraTransform;
     private float defaultPosition;
@@ -31,9 +33,10 @@ public class CameraManager : MonoBehaviour
     private void Awake(){
 
         inputManager = FindObjectOfType<InputManager>();
-        targetTransform = FindObjectOfType<PlayerManager>().transform;
+        auxTrans = FindObjectOfType<PlayerManager>().transform;
         cameraTransform = Camera.main.transform;
         defaultPosition = cameraTransform.localPosition.z;
+        cameraConcentrate = GameObject.Find("ConcentrateCamera").transform;
 
     }
 
@@ -46,6 +49,14 @@ public class CameraManager : MonoBehaviour
     }
 
     private void FollowTarget(){
+
+        if(inputManager.isConcentrating == 0){
+            targetTransform = auxTrans;
+            cameraFollowSpeed = 0.2f;
+        }else{
+            targetTransform = cameraConcentrate;
+            cameraFollowSpeed = 0f;
+        }
 
         Vector3 targetPosition = Vector3.SmoothDamp(transform.position, targetTransform.position, ref cameraFollowVelocity, cameraFollowSpeed);
         transform.position = targetPosition;
