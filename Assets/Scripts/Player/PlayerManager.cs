@@ -8,18 +8,21 @@ public class PlayerManager : MonoBehaviour
     InputManager inputManager;
     CameraManager cameraManager;
     PlayerLocomotion playerLocomotion;
+    PlayerHabilities playerHabilities;
 
     private void Awake(){
     
         inputManager = GetComponent<InputManager>();
         cameraManager = FindObjectOfType<CameraManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+        playerHabilities = GetComponent<PlayerHabilities>();
 
     }
 
     private void Update(){
 
         inputManager.HandleAllInputs();
+        playerHabilities.HandleAllHabilities();
 
     }
 
