@@ -17,7 +17,8 @@ public class PlayerHabilities : MonoBehaviour
     public GameObject pointer;
     public Transform grabPos;
     [Range(0, 1)]public float objectFollowSpeed;
-    private Vector3 objectFollowVelocity = Vector3.zero;
+    private float grabZoom;
+    private bool grabbing;
 
     
 
@@ -26,6 +27,7 @@ public class PlayerHabilities : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         photoreception = GameObject.FindObjectOfType<PhotoreceptionSystem>().GetComponent<PhotoreceptionSystem>();
         hovered = false;
+        grabZoom = grabPos.position.z;
     }
 
     public void HandleAllHabilities(){
@@ -35,6 +37,13 @@ public class PlayerHabilities : MonoBehaviour
     }
 
     public void Grabbing(){
+
+        //Set grabbing zoom.
+
+        grabZoom += -inputManager.mouseWheel * 0.001f;
+        grabZoom = Mathf.Clamp(grabZoom, 1.7f, 4f);
+        
+        //Grabbing object.
 
         if(inputManager.isConcentrating == 1f){
 
@@ -59,29 +68,27 @@ public class PlayerHabilities : MonoBehaviour
 
                     if(inputManager.isGrabbing == 1f){
 
-                        if(hitObject.transform.position != grabPos.position){
-                            hitObject.transform.position = Vector3.SmoothDamp(hitObject.transform.position, grabPos.position, ref objectFollowVelocity, objectFollowSpeed);
-                        }else hitObject.transform.position = grabPos.position;                    
-                        
-                        hitObject.GetComponent<Rigidbody>().useGravity = false;
+                        grabbing = true;
 
-                    }else hitObject.GetComponent<Rigidbody>().useGravity = true;
+                    }else if(!grabbing) hitObject.GetComponent<Rigidbody>().useGravity = true;
                     
 
                 }else{
 
-                    hovered = false;
+                    if(inputManager.isGrabbing == 0f && !grabbing){
 
-                    if(hitObject != null){
-                        hitObject.GetComponent<MeshRenderer>().material = defMat;
-                        hitObject.GetComponent<Rigidbody>().useGravity = true;
+                        if(hitObject != null){
+                            hitObject.GetComponent<MeshRenderer>().material = defMat;
+                            hitObject.GetComponent<Rigidbody>().useGravity = true;
+                        }
+
                     }
                     
                 }
 
             }else{
 
-                if(hitObject != null){
+                if(hitObject != null && inputManager.isGrabbing == 0f){
                     hitObject.GetComponent<MeshRenderer>().material = defMat;
                     hitObject.GetComponent<Rigidbody>().useGravity = true;
                 }
@@ -89,10 +96,37 @@ public class PlayerHabilities : MonoBehaviour
             }
             
         }else{
-
+            
+            grabbing = false;
+            hovered = false;
             pointer.SetActive(false);
-            if(hitObject != null) hitObject.GetComponent<MeshRenderer>().material = defMat;
+
+            if(hitObject != null){
+
+               hitObject.GetComponent<Rigidbody>().useGravity = true; 
+               hitObject.GetComponent<MeshRenderer>().material = defMat;
+
+            }
                 
+
+        }
+
+        if(grabbing){
+            moveObject();
+        }
+
+    }
+
+    void moveObject(){
+
+        hitObject.transform.position = Vector3.Lerp(hitObject.transform.position, grabPos.position, objectFollowSpeed);
+                        
+        hitObject.GetComponent<Rigidbody>().useGravity = false;
+
+        if(inputManager.isWaving == 1f){
+
+            hitObject.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 10f, ForceMode.Impulse);
+            grabbing = false;
 
         }
 

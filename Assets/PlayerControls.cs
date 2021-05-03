@@ -81,6 +81,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""bf4f08ee-0f3c-4b1e-8bc8-f5de51eeaeaf"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -358,6 +366,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Wave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94488f10-e3f7-4fc9-9c7e-b1b8d56906fa"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -374,6 +393,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerMovement_Grab = m_PlayerMovement.FindAction("Grab", throwIfNotFound: true);
         m_PlayerMovement_Teleport = m_PlayerMovement.FindAction("Teleport", throwIfNotFound: true);
         m_PlayerMovement_Wave = m_PlayerMovement.FindAction("Wave", throwIfNotFound: true);
+        m_PlayerMovement_Zoom = m_PlayerMovement.FindAction("Zoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -431,6 +451,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerMovement_Grab;
     private readonly InputAction m_PlayerMovement_Teleport;
     private readonly InputAction m_PlayerMovement_Wave;
+    private readonly InputAction m_PlayerMovement_Zoom;
     public struct PlayerMovementActions
     {
         private @PlayerControls m_Wrapper;
@@ -443,6 +464,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Grab => m_Wrapper.m_PlayerMovement_Grab;
         public InputAction @Teleport => m_Wrapper.m_PlayerMovement_Teleport;
         public InputAction @Wave => m_Wrapper.m_PlayerMovement_Wave;
+        public InputAction @Zoom => m_Wrapper.m_PlayerMovement_Zoom;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -476,6 +498,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Wave.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
                 @Wave.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
                 @Wave.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
+                @Zoom.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnZoom;
+                @Zoom.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnZoom;
+                @Zoom.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnZoom;
             }
             m_Wrapper.m_PlayerMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -504,6 +529,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Wave.started += instance.OnWave;
                 @Wave.performed += instance.OnWave;
                 @Wave.canceled += instance.OnWave;
+                @Zoom.started += instance.OnZoom;
+                @Zoom.performed += instance.OnZoom;
+                @Zoom.canceled += instance.OnZoom;
             }
         }
     }
@@ -518,5 +546,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnGrab(InputAction.CallbackContext context);
         void OnTeleport(InputAction.CallbackContext context);
         void OnWave(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
 }

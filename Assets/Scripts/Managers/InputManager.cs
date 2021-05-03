@@ -24,6 +24,7 @@ public class InputManager : MonoBehaviour
     [HideInInspector] public float moveAmount;
     [HideInInspector] public float verticalInput;
     [HideInInspector] public float horizontalInput;
+    [HideInInspector] public float mouseWheel;
 
     private void Awake(){
         
@@ -56,6 +57,7 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerMovement.Grab.performed += i => isGrabbing = i.ReadValue<float>(); //Records if player is grabbing.
             playerControls.PlayerMovement.Teleport.performed += i => isTeleporting = i.ReadValue<float>(); //Records if player is teleporting.
             playerControls.PlayerMovement.Wave.performed += i => isWaving = i.ReadValue<float>(); //Records if player is waving.
+            playerControls.PlayerMovement.Zoom.performed += i => mouseWheel = i.ReadValue<Vector2>().y; //Records y value from the scroll wheel.
 
 
         }
