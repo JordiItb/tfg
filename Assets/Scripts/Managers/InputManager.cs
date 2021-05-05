@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour
     PlayerControls playerControls;
     public PhotoreceptionSystem photoreceptionSystem;
     AnimatorManager animatorManager;
-    
+    [Header("Movement Recorders")]
     public Vector2 movementInput;
     public Vector2 cameraInput;
     public float isRunning;
