@@ -6,7 +6,9 @@ public class InputManager : MonoBehaviour
 {
     
     PlayerControls playerControls;
+    [Header("Light")]
     public PhotoreceptionSystem photoreceptionSystem;
+    [Range(0, 0.2f)]public float lightLevel;
     AnimatorManager animatorManager;
     [Header("Movement Recorders")]
     public Vector2 movementInput;
@@ -111,7 +113,7 @@ public class InputManager : MonoBehaviour
             MovePlayer(true, 1f, true, false);
 
         }
-        if(photoreceptionSystem.lightValue <= 0.03f){
+        if(photoreceptionSystem.lightValue <= lightLevel){
             if(isConcentrating == 1f){
                 MovePlayer(false, 1f, false, true);
             }
