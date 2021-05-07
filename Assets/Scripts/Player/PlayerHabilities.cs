@@ -192,64 +192,69 @@ public class PlayerHabilities : MonoBehaviour
 
     public void Teleport(RaycastHit hit){
 
-        if(Time.time >= teleportCooldown && !TPready){
-            particles[3].Play();
-        }
-        if(particles[3].isPlaying){
-            TPready = true;
-        }
-
-        //If the normal of the raycast is greater than 0, means that the player wants to teleport to an area from above/the same level.
-        if(hit.normal.y > 0f){
+        if(inputManager.isConcentrating == 1f || tping){
             
-            if(inputManager.isConcentrating == 1f) particles[2].Play();
-
-            teleport.transform.position = hit.point;
-
-            TeleportPlayer(hit.point);
-
-        //If the normal of the raycast is smaller than 0, means that the player wants to teleport to an area from below.
-        }else if(hit.normal.y < 0f){
-
-            Debug.DrawRay(hit.point, Vector3.down * maxRayLength, Color.white);
-
-            if(!tping){
-                //Shoots a raycast from the intersection point of the original raycast in order to find the point where the player wants to be teleported to.
-                if(Physics.Raycast(hit.point - Vector3.down, Vector3.down, out height, maxRayLength)){
-
-                    if(inputManager.isConcentrating == 1f) particles[2].Play();
-
-                }
-
-                teleport.transform.position = height.point;
-
+            if(Time.time >= teleportCooldown && !TPready){
+                particles[3].Play();
+            }
+            if(particles[3].isPlaying){
+                TPready = true;
             }
 
-            TeleportPlayer(height.point);
+            //If the normal of the raycast is greater than 0, means that the player wants to teleport to an area from above/the same level.
+            if(hit.normal.y > 0f){
+                
+                if(inputManager.isConcentrating == 1f) particles[2].Play();
 
-        //If the normal of the raycast is equal to 0, means that the player is pointing to a wall, so a raycast pointing down will be the point the player will be teleported to.
-        }else if(hit.normal.y == 0f){
+                teleport.transform.position = hit.point;
 
-            Debug.DrawRay(hit.point + hit.normal, Vector3.down * maxRayLength, Color.white);
-            if(!tping){
-                //Shoots a raycast from the wall to find the point where the player wants to be teleported to, with an offset so when the player teleports, doesn't teleport into the wall.
-                if(Physics.Raycast(hit.point + hit.normal, Vector3.down, out wall, maxRayLength)){
+                TeleportPlayer(hit.point);
 
-                    if(wall.normal.y > 0f){
+            //If the normal of the raycast is smaller than 0, means that the player wants to teleport to an area from below.
+            }else if(hit.normal.y < 0f){
+
+                Debug.DrawRay(hit.point, Vector3.down * maxRayLength, Color.white);
+
+                if(!tping){
+                    //Shoots a raycast from the intersection point of the original raycast in order to find the point where the player wants to be teleported to.
+                    if(Physics.Raycast(hit.point - Vector3.down, Vector3.down, out height, maxRayLength)){
+
                         if(inputManager.isConcentrating == 1f) particles[2].Play();
-                        teleport.transform.position = wall.point;
+
                     }
-                    
+
+                    teleport.transform.position = height.point;
+
                 }
 
+                TeleportPlayer(height.point);
+
+            //If the normal of the raycast is equal to 0, means that the player is pointing to a wall, so a raycast pointing down will be the point the player will be teleported to.
+            }else if(hit.normal.y == 0f){
+
+                Debug.DrawRay(hit.point + hit.normal, Vector3.down * maxRayLength, Color.white);
+                if(!tping){
+                    //Shoots a raycast from the wall to find the point where the player wants to be teleported to, with an offset so when the player teleports, doesn't teleport into the wall.
+                    if(Physics.Raycast(hit.point + hit.normal, Vector3.down, out wall, maxRayLength)){
+
+                        if(wall.normal.y > 0f){
+                            if(inputManager.isConcentrating == 1f) particles[2].Play();
+                            teleport.transform.position = wall.point;
+                        }
+                        
+                    }
+
+                }
+
+                TeleportPlayer(wall.point + hit.normal);
+
+            }
+            else{
+                particles[2].Stop();
             }
 
-            TeleportPlayer(wall.point + hit.normal);
+        }
 
-        }
-        else{
-            particles[2].Stop();
-        }
 
     }
 
