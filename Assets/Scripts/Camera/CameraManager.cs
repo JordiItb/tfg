@@ -21,13 +21,15 @@ public class CameraManager : MonoBehaviour
     [Range(0, 1)] public float cameraCollisionRadius;
     [Header("Camera speed")]
     [Range(0, 1)] public float cameraFollowSpeed;
-    [Range(0, 1)] public float cameraLookSpeed;
-    [Range(0, 1)] public float cameraPivotSpeed;
+    [Range(0, 1)] public float cameraLookSpeed; //x sensibility.
+    [Range(0, 1)] public float cameraPivotSpeed; //y sensibility.
     private float lookAngle; //Camera looking up and down.
     private float pivotAngle; //Camera looking left and right.
     [Header("Angles")]
     public float minimumPivotAngle;
     public float maximumPivotAngle;
+    public float concentrationMinimumPivotAngle;
+    public float concentrationMaximumPivotAngle;
 
 
     private void Awake(){
@@ -70,7 +72,12 @@ public class CameraManager : MonoBehaviour
 
         lookAngle = lookAngle + (inputManager.cameraInputX * cameraLookSpeed);
         pivotAngle = pivotAngle - (inputManager.cameraInputY * cameraPivotSpeed);
-        pivotAngle = Mathf.Clamp(pivotAngle, minimumPivotAngle, maximumPivotAngle);
+        if(inputManager.isConcentrating == 0f){
+            pivotAngle = Mathf.Clamp(pivotAngle, minimumPivotAngle, maximumPivotAngle);
+        }else{
+            pivotAngle = Mathf.Clamp(pivotAngle, concentrationMinimumPivotAngle, concentrationMaximumPivotAngle);
+        }
+        
 
         rotation = Vector3.zero;
         rotation.y = lookAngle;
