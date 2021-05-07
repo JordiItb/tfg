@@ -9,6 +9,13 @@ public class PlayerManager : MonoBehaviour
     CameraManager cameraManager;
     PlayerLocomotion playerLocomotion;
     PlayerHabilities playerHabilities;
+    PhotoreceptionSystem photoreception;
+    [Header("Life Settings")]
+    public float maxHealth;
+    public float health;
+    public float recoveryRate;
+    public float damage;
+    [Range(0.05f, 0.2f)]public float lightDamageValue;
 
     private void Awake(){
     
@@ -16,6 +23,9 @@ public class PlayerManager : MonoBehaviour
         cameraManager = FindObjectOfType<CameraManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
         playerHabilities = GetComponent<PlayerHabilities>();
+        photoreception = FindObjectOfType<PhotoreceptionSystem>();
+
+        health = maxHealth;
 
     }
 
@@ -23,6 +33,7 @@ public class PlayerManager : MonoBehaviour
 
         inputManager.HandleAllInputs();
         playerHabilities.HandleAllHabilities();
+        Heal();
 
     }
 
@@ -35,6 +46,18 @@ public class PlayerManager : MonoBehaviour
     private void LateUpdate(){
 
         cameraManager.HandleAllCameraMovement();
+
+    }
+
+    private void Heal(){
+
+        if(photoreception.lightValue >= lightDamageValue){
+
+            health -= damage * Time.deltaTime;
+
+        }else if(health < maxHealth){
+            health += recoveryRate * Time.deltaTime;
+        }
 
     }
 }

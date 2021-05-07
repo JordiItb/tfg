@@ -6,6 +6,7 @@ public class PlayerLocomotion : MonoBehaviour
 {
 
     InputManager inputManager;
+    PlayerHabilities playerHabilities;
 
     [SerializeField] Vector3 moveDirection;
     Transform cameraObject;
@@ -36,6 +37,7 @@ public class PlayerLocomotion : MonoBehaviour
 
         inputManager = GetComponent<InputManager>();
         rb = GetComponent<Rigidbody>();
+        playerHabilities = GetComponent<PlayerHabilities>();
         cameraObject = Camera.main.transform;
         normalCollider.enabled = true;
         crouchCollider.enabled = false;
@@ -50,44 +52,48 @@ public class PlayerLocomotion : MonoBehaviour
     }
 
     private void HandleMovement(){
+        //If player is tping, movement is disabled.
+        if(!playerHabilities.tping){
 
-        isGrounded = Physics.CheckSphere(sphereCheck.position, radiusDistace, groundMask);
+            isGrounded = Physics.CheckSphere(sphereCheck.position, radiusDistace, groundMask);
 
-        if(!isGrounded && !OnSlope()){
-            //Normal fall.
-            rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f, moveDirection.z);
-        }else if(!isGrounded && OnSlope()){
-            //Slope fall (augmented fall in order for player to not "bounce" while falling).
-            rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f * downSlopeForce, moveDirection.z);
-        }else if(inputManager.isConcentrating == 1){
-            rb.velocity = Vector3.zero;
-        }
-        else{
-            #region Player Movement Calculation.
-                moveDirection = cameraObject.forward * inputManager.verticalInput; //Moves player the direction the camera is facing.
-                moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput; //Moves player left/right based on the camera direction.
-                moveDirection.Normalize(); //Changes vector length to 1 (0 if it's too small).
-                moveDirection.y = 0;
+            if(!isGrounded && !OnSlope()){
+                //Normal fall.
+                rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f, moveDirection.z);
+            }else if(!isGrounded && OnSlope()){
+                //Slope fall (augmented fall in order for player to not "bounce" while falling).
+                rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f * downSlopeForce, moveDirection.z);
+            }else if(inputManager.isConcentrating == 1){
+                rb.velocity = Vector3.zero;
+            }
+            else{
+                #region Player Movement Calculation.
+                    moveDirection = cameraObject.forward * inputManager.verticalInput; //Moves player the direction the camera is facing.
+                    moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput; //Moves player left/right based on the camera direction.
+                    moveDirection.Normalize(); //Changes vector length to 1 (0 if it's too small).
+                    moveDirection.y = 0;
 
-                if(inputManager.isRunning == 1f && inputManager.isCrouching == 0f && inputManager.isConcentrating == 0f){
-                    moveDirection = moveDirection * runningSpeed; //Running.
-                    normalCollider.enabled = true;
-                    crouchCollider.enabled = false;
-                }
-                if(inputManager.isRunning == 0f && inputManager.isCrouching == 0f  && inputManager.isConcentrating == 0f){
-                    moveDirection = moveDirection * walkingSpeed; //Walking.
-                    normalCollider.enabled = true;
-                    crouchCollider.enabled = false;
-                }
-                if(inputManager.isCrouching == 1f && inputManager.isRunning == 0f  && inputManager.isConcentrating == 0f || inputManager.isRunning == 1f){
-                    moveDirection = moveDirection * crouchingSpeed; //Crouching.
-                    crouchCollider.enabled = true;
-                    normalCollider.enabled = false;
-                }
-                
-                Vector3 movementVelocity = moveDirection;
-            #endregion
-            rb.velocity = movementVelocity; //Moves player according to the calculation above.
+                    if(inputManager.isRunning == 1f && inputManager.isCrouching == 0f && inputManager.isConcentrating == 0f){
+                        moveDirection = moveDirection * runningSpeed; //Running.
+                        normalCollider.enabled = true;
+                        crouchCollider.enabled = false;
+                    }
+                    if(inputManager.isRunning == 0f && inputManager.isCrouching == 0f  && inputManager.isConcentrating == 0f){
+                        moveDirection = moveDirection * walkingSpeed; //Walking.
+                        normalCollider.enabled = true;
+                        crouchCollider.enabled = false;
+                    }
+                    if(inputManager.isCrouching == 1f && inputManager.isRunning == 0f  && inputManager.isConcentrating == 0f || inputManager.isRunning == 1f){
+                        moveDirection = moveDirection * crouchingSpeed; //Crouching.
+                        crouchCollider.enabled = true;
+                        normalCollider.enabled = false;
+                    }
+                    
+                    Vector3 movementVelocity = moveDirection;
+                #endregion
+                rb.velocity = movementVelocity; //Moves player according to the calculation above.
+            }
+
         }
 
     }

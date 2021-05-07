@@ -6,6 +6,7 @@ public class InputManager : MonoBehaviour
 {
     
     PlayerControls playerControls;
+    PlayerHabilities playerHabilities;
     [Header("Light")]
     public PhotoreceptionSystem photoreceptionSystem;
     [Range(0, 0.2f)]public float lightLevel;
@@ -31,7 +32,8 @@ public class InputManager : MonoBehaviour
     private void Awake(){
         
         animatorManager = GetComponent<AnimatorManager>();
-        photoreceptionSystem = GameObject.FindObjectOfType<PhotoreceptionSystem>().GetComponent<PhotoreceptionSystem>();
+        photoreceptionSystem = FindObjectOfType<PhotoreceptionSystem>();
+        playerHabilities = FindObjectOfType<PlayerHabilities>();
 
     }
 
@@ -117,7 +119,7 @@ public class InputManager : MonoBehaviour
             if(isConcentrating == 1f){
                 MovePlayer(false, 1f, false, true);
             }
-        }else{
+        }else if(photoreceptionSystem.lightValue >= lightLevel && !playerHabilities.tping){
             isConcentrating = 0f;
         }
 

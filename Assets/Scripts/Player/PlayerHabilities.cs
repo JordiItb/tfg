@@ -16,12 +16,13 @@ public class PlayerHabilities : MonoBehaviour
     public float maxRayLength;
     bool hovered;
     GameObject hitObject;
-    [Header("Object")]
+    [Header("Grab")]
     public Material highlighted;
     public GameObject pointer;
     public Transform grabPos;
     [Range(0, 1)]public float objectFollowSpeed;
-    [Range(0, 0.5f)] public float playerTeleportSpeed;
+    public float trajectoryCooldown;
+    private float trajectoryFrequency;    
     private float grabZoom;
     private bool grabbing;
     private float waveCooldown;
@@ -32,11 +33,13 @@ public class PlayerHabilities : MonoBehaviour
     public GameObject teleport;
     public float teleportSeconds;
     public bool tping;
+    [Range(0, 0.5f)] public float playerTeleportSpeed;
     private float teleportCooldown;
     private Vector3 tpPos;
     bool TPready;
     [Header("Particles")]
     public ParticleSystem[] particles;
+    public GameObject trajectoryParticles;
     
     void Start()
     {
@@ -46,6 +49,7 @@ public class PlayerHabilities : MonoBehaviour
         grabZoom = grabPos.position.z;
         waveCooldown = 0f;
         TPready = true;
+        trajectoryFrequency = 0f;
     }
 
     public void HandleAllHabilities(){
@@ -102,6 +106,8 @@ public class PlayerHabilities : MonoBehaviour
                     }
                 //If the raycast is not colliding with anything, returns the last interactuable object to its default state.
                 }else{
+                    
+                    if(hit.collider != null && hit.collider.gameObject.name != "Door") Grabbing(hitObject);
 
                     particles[2].Stop();
 
@@ -115,8 +121,11 @@ public class PlayerHabilities : MonoBehaviour
             }else{
                 Teleport(hit);
             }
-
-            Grabbing(hitObject);
+            
+            if(hit.collider != null && hit.collider.gameObject.name != "Door" || grabbing){
+                Grabbing(hitObject);
+            }
+            
 
         //If player is not concentrating, returns the last interactuable object to its default state.
         }else{
@@ -150,15 +159,30 @@ public class PlayerHabilities : MonoBehaviour
 
         }
 
-        if(grabbing) moveObject(grabObj);
+        if(grabbing){
 
+            moveObject(grabObj);
+
+            DrawTrajectory(grabObj);
+
+        }
+        
+
+    }
+
+    void DrawTrajectory(GameObject grabObj){
+
+        //If the current time is greater than the frequency of the trajectory, instantiates another trajectory line.        
+        if(Time.time >= trajectoryFrequency){
+            Instantiate(trajectoryParticles, grabObj.transform.position, Quaternion.identity);
+            trajectoryFrequency = Time.time + trajectoryCooldown;
+        }
+        
     }
 
     void moveObject(GameObject grabObj){
 
-        //Set grabbing zoom.
-        grabZoom += -inputManager.mouseWheel * 0.001f;
-        grabZoom = Mathf.Clamp(grabZoom, 1.7f, 4f);
+        grabObj.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
         //Move the object
         grabObj.transform.position = Vector3.Lerp(grabObj.transform.position, grabPos.position, objectFollowSpeed);
@@ -174,11 +198,16 @@ public class PlayerHabilities : MonoBehaviour
 
     public void PulseWave(GameObject obj){
 
+        //Set force.
+        waveForce += inputManager.mouseWheel * 0.001f;
+        waveForce = Mathf.Clamp(waveForce, 8f, 12f);
+
         //If the player perfoms the action of pulse waving when concentrating, adds a force to the selected object.        
         if(inputManager.isConcentrating == 1f && inputManager.isWaving == 1f && Time.time >= waveCooldown){
 
             obj.GetComponent<Rigidbody>().AddForce((Camera.main.transform.forward + Vector3.up / 2f) * waveForce, ForceMode.Impulse);
             obj.GetComponent<Rigidbody>().useGravity = true;
+            obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
             obj.GetComponent<MeshRenderer>().material = defMat;
             grabbing = false;
             hovered = false;
@@ -192,14 +221,14 @@ public class PlayerHabilities : MonoBehaviour
 
     public void Teleport(RaycastHit hit){
 
+        if(Time.time >= teleportCooldown && !TPready){
+            particles[3].Play();
+        }
+        if(particles[3].isPlaying){
+            TPready = true;
+        }
+
         if(inputManager.isConcentrating == 1f || tping){
-            
-            if(Time.time >= teleportCooldown && !TPready){
-                particles[3].Play();
-            }
-            if(particles[3].isPlaying){
-                TPready = true;
-            }
 
             //If the normal of the raycast is greater than 0, means that the player wants to teleport to an area from above/the same level.
             if(hit.normal.y > 0f){

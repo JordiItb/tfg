@@ -22,8 +22,6 @@ public class ArtificalLightManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        
-
     }
 
 }

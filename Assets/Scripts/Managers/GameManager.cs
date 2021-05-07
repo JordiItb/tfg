@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,10 +17,16 @@ public class GameManager : MonoBehaviour
     PhotoreceptionSystem photoreceptionSystem;
     public Text lightText;
     public Text fpsText;
+
+    PlayerManager playerManager;
+    Volume volume;
+    Vignette vignette;
     
     void Awake(){
 
-        photoreceptionSystem = GameObject.FindObjectOfType<PhotoreceptionSystem>().GetComponent<PhotoreceptionSystem>();
+        photoreceptionSystem = FindObjectOfType<PhotoreceptionSystem>();
+        playerManager = FindObjectOfType<PlayerManager>();
+        volume = FindObjectOfType<Volume>();
 
     }
 
@@ -25,6 +34,7 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        volume.profile.TryGet(out vignette);
     }
 
     void Update(){
@@ -36,6 +46,12 @@ public class GameManager : MonoBehaviour
             m_FpsAccumulator = 0;
             m_FpsNextPeriod += fpsMeasurePeriod;
             fpsText.text = "FPS: " + m_CurrentFps;
+        }
+
+        vignette.intensity.value = (-playerManager.health / 100f) + 1f;
+
+        if(playerManager.health <= 0f){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
     }
