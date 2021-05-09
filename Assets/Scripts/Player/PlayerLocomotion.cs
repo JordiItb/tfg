@@ -33,6 +33,8 @@ public class PlayerLocomotion : MonoBehaviour
     public CapsuleCollider normalCollider;
     public CapsuleCollider crouchCollider;
 
+    bool crouch;
+
     private void Awake(){
 
         inputManager = GetComponent<InputManager>();
@@ -41,6 +43,7 @@ public class PlayerLocomotion : MonoBehaviour
         cameraObject = Camera.main.transform;
         normalCollider.enabled = true;
         crouchCollider.enabled = false;
+        crouch = false;
 
     }
 
@@ -75,19 +78,38 @@ public class PlayerLocomotion : MonoBehaviour
 
                     if(inputManager.isRunning == 1f && inputManager.isCrouching == 0f && inputManager.isConcentrating == 0f){
                         moveDirection = moveDirection * runningSpeed; //Running.
-                        normalCollider.enabled = true;
-                        crouchCollider.enabled = false;
                     }
                     if(inputManager.isRunning == 0f && inputManager.isCrouching == 0f  && inputManager.isConcentrating == 0f){
                         moveDirection = moveDirection * walkingSpeed; //Walking.
-                        normalCollider.enabled = true;
-                        crouchCollider.enabled = false;
                     }
                     if(inputManager.isCrouching == 1f && inputManager.isRunning == 0f  && inputManager.isConcentrating == 0f || inputManager.isRunning == 1f){
                         moveDirection = moveDirection * crouchingSpeed; //Crouching.
-                        crouchCollider.enabled = true;
-                        normalCollider.enabled = false;
                     }
+                    
+                    //Player colliders, changes according if player is crouching or not.
+                    if(inputManager.isCrouching == 1f){
+                        normalCollider.enabled = false;
+                        crouchCollider.enabled = true;
+                    }else{
+                        normalCollider.enabled = true;
+                        crouchCollider.enabled = false;
+                    }
+                    #region Detection of upper objects when crouching.
+                    if(inputManager.isCrouching == 1f || crouch){
+
+                        Debug.DrawRay(new Vector3(transform.position.x,transform.position.y + transform.localScale.y, transform.position.z), Vector3.up / 2f, Color.white);
+
+                        if(Physics.Raycast(new Vector3(transform.position.x,transform.position.y + transform.localScale.y, transform.position.z), Vector3.up, 0.5f)){
+                            
+                            inputManager.isCrouching = 1f;
+                            crouch = true;
+
+                        }else if(crouch){
+                            inputManager.isCrouching = 0f;
+                            crouch = false;
+                        }
+                    }
+                    #endregion
                     
                     Vector3 movementVelocity = moveDirection;
                 #endregion

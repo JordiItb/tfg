@@ -16,6 +16,10 @@ public class PlayerManager : MonoBehaviour
     public float recoveryRate;
     public float damage;
     [Range(0.05f, 0.2f)]public float lightDamageValue;
+    [Header("Material Settings")]
+    public SkinnedMeshRenderer skin;
+    public Material defMaterial;
+    public Material shadowMaterial;
 
     private void Awake(){
     
@@ -34,6 +38,7 @@ public class PlayerManager : MonoBehaviour
         inputManager.HandleAllInputs();
         playerHabilities.HandleAllHabilities();
         Heal();
+        MaterialChange();
 
     }
 
@@ -57,6 +62,20 @@ public class PlayerManager : MonoBehaviour
 
         }else if(health < maxHealth){
             health += recoveryRate * Time.deltaTime;
+        }
+
+    }
+
+    private void MaterialChange(){
+
+        if(photoreception.lightValue >= inputManager.lightLevel){
+
+            skin.material = defMaterial;
+
+        }else{
+
+            skin.material = shadowMaterial;
+
         }
 
     }

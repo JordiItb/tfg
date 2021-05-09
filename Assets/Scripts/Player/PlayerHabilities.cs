@@ -75,6 +75,8 @@ public class PlayerHabilities : MonoBehaviour
                         //Checks if the object is interactuable.
                         if(hit.collider.CompareTag("Interactuable")){
 
+                            particles[2].Stop();
+
                             #region Highlight object.
                             hitObject = hit.collider.gameObject;
                             if(hovered){
@@ -96,6 +98,7 @@ public class PlayerHabilities : MonoBehaviour
 
                             if(hitObject != null && !grabbing){
                                 hitObject.GetComponent<MeshRenderer>().material = defMat;
+                                hitObject = null;
                             }
                             
                         }
@@ -106,6 +109,8 @@ public class PlayerHabilities : MonoBehaviour
                     }
                 //If the raycast is not colliding with anything, returns the last interactuable object to its default state.
                 }else{
+
+                    if(!grabbing) hitObject = null;
                     
                     if(hit.collider != null && hit.collider.gameObject.name != "Door") Grabbing(hitObject);
 
@@ -160,10 +165,12 @@ public class PlayerHabilities : MonoBehaviour
         }
 
         if(grabbing){
+            
+            if(grabObj.name != "Door"){
+                moveObject(grabObj);
 
-            moveObject(grabObj);
-
-            DrawTrajectory(grabObj);
+                DrawTrajectory(grabObj);
+            }
 
         }
         
