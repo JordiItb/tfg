@@ -15,8 +15,8 @@ public class GeometryGrassPainter : MonoBehaviour
 
     public Color AdjustedColor;
 
-    [Range(1, 600000)]
-    public int grassLimit = 50000;
+    //[Range(1, 600000)]
+    //public int grassLimit = 50000;
 
     private Vector3 lastPosition = Vector3.zero;
 
@@ -145,7 +145,7 @@ public class GeometryGrassPainter : MonoBehaviour
                     ray.origin += origin;
 
                     // if the ray hits something thats on the layer mask,  within the grass limit and within the y normal limit
-                    if (Physics.Raycast(ray, out terrainHit, 200f, hitMask.value) && i < grassLimit && terrainHit.normal.y <= (1 + normalLimit) && terrainHit.normal.y >= (1 - normalLimit))
+                    if (Physics.Raycast(ray, out terrainHit, 200f, hitMask.value) && terrainHit.normal.y <= (1 + normalLimit) && terrainHit.normal.y >= (1 - normalLimit))
                     {
                         if ((paintMask.value & (1 << terrainHit.transform.gameObject.layer)) > 0)
                         {
@@ -232,7 +232,7 @@ public class GeometryGrassPainter : MonoBehaviour
             {
                 Ray ray = scene.camera.ScreenPointToRay(mousePos);
 
-                if (Physics.Raycast(ray, out terrainHit, 200f, hitMask.value))
+                if (Physics.Raycast(ray, out terrainHit, Mathf.Infinity, hitMask.value))
                 {
                     hitPos = terrainHit.point;
                     hitPosGizmo = hitPos;

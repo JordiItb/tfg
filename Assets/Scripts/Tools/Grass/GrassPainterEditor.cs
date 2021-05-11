@@ -37,10 +37,10 @@ public class GrassPainterEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        EditorGUILayout.LabelField("Grass Limit", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Grass", EditorStyles.boldLabel);
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField(grassPainter.i.ToString() + "/", EditorStyles.label);
-        grassPainter.grassLimit = EditorGUILayout.IntField(grassPainter.grassLimit);
+        EditorGUILayout.LabelField(grassPainter.i.ToString(), EditorStyles.label);
+        //grassPainter.grassLimit = EditorGUILayout.IntField(grassPainter.grassLimit);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Paint Status (Right-Mouse Button to paint)", EditorStyles.boldLabel);
