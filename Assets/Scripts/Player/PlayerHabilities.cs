@@ -109,8 +109,6 @@ public class PlayerHabilities : MonoBehaviour
                     }
                 //If the raycast is not colliding with anything, returns the last interactuable object to its default state.
                 }else{
-
-                    if(!grabbing) hitObject = null;
                     
                     if(hit.collider != null && hit.collider.gameObject.name != "Door") Grabbing(hitObject);
 
@@ -121,6 +119,8 @@ public class PlayerHabilities : MonoBehaviour
                         hitObject.GetComponent<Rigidbody>().useGravity = true;
                         hitObject = null;
                     }
+
+                    if(!grabbing) hitObject = null;
 
                 }
             }else{
