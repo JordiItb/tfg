@@ -19,15 +19,15 @@ public class PlayerLocomotion : MonoBehaviour
     [Range(0, 1)] public float crouchingSpeed;
     [Range(0, 40)] public float rotationSpeed;
 
-    [Header("Ground Check")]
+    [Header("Fall")]
+    public float inAirTime;
+    public float leapingVelocity;
+    public float fallingSpeed;
     public Transform sphereCheck;
-    [Range(0, 1)] public float radiusDistace;
     public LayerMask groundMask;
+    [Range(0, 1)] public float radiusDistace;
+    [Range(0, 1)]public float rayCastHeightOffSet;
     [SerializeField] private bool isGrounded;
-
-    [Header("Slope And Stair Movement")]
-    [Range(0,10)] public float slopeRadius;
-    public float downSlopeForce;
 
     [Header("Colliders")]
     public CapsuleCollider normalCollider;
@@ -40,7 +40,9 @@ public class PlayerLocomotion : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         rb = GetComponent<Rigidbody>();
         playerHabilities = GetComponent<PlayerHabilities>();
+
         cameraObject = Camera.main.transform;
+
         normalCollider.enabled = true;
         crouchCollider.enabled = false;
         crouch = false;
@@ -51,25 +53,18 @@ public class PlayerLocomotion : MonoBehaviour
 
         HandleMovement();
         HandleRotation();
+        HandleFallingAndLanding();
+        
 
     }
 
     private void HandleMovement(){
         //If player is tping, movement is disabled.
         if(!playerHabilities.tping){
-
-            isGrounded = Physics.CheckSphere(sphereCheck.position, radiusDistace, groundMask);
-
-            if(!isGrounded && !OnSlope()){
-                //Normal fall.
-                rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f, moveDirection.z);
-            }else if(!isGrounded && OnSlope()){
-                //Slope fall (augmented fall in order for player to not "bounce" while falling).
-                rb.velocity = new Vector3(moveDirection.x , Vector3.down.y * 9.81f * downSlopeForce, moveDirection.z);
-            }else if(inputManager.isConcentrating == 1){
+            if(inputManager.isConcentrating == 1){
                 rb.velocity = Vector3.zero;
             }
-            else{
+            else if(isGrounded){
                 #region Player Movement Calculation.
                     moveDirection = cameraObject.forward * inputManager.verticalInput; //Moves player the direction the camera is facing.
                     moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput; //Moves player left/right based on the camera direction.
@@ -119,17 +114,6 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
     }
-    private bool OnSlope(){
-
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position, Vector3.down, out hit, GetComponent<CapsuleCollider>().height / 2 * slopeRadius)){
-            if(hit.normal != Vector3.up){
-                return true;
-            }
-        }
-        return false;
-
-    }
 
     private void HandleRotation(){
 
@@ -151,5 +135,37 @@ public class PlayerLocomotion : MonoBehaviour
         #endregion
         transform.rotation = playerRotation; //Rotates player according to the calculation above.
 
-    }  
+    }
+
+    private void HandleFallingAndLanding(){
+
+        RaycastHit hit;
+        Vector3 rayCastOrigin = transform.position;
+        Vector3 targetPosition;
+        rayCastOrigin.y += rayCastHeightOffSet;
+        targetPosition = transform.position;
+
+        if(!isGrounded){
+
+            inAirTime = inAirTime + Time.deltaTime;
+            rb.AddForce(transform.forward * leapingVelocity);
+            rb.AddForce(Vector3.down * fallingSpeed * inAirTime);
+
+        }
+
+        if(Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, 0.5f, groundMask)){
+
+            Vector3 rayCastHitPoint = hit.point;
+            targetPosition.y = rayCastHitPoint.y;
+            inAirTime = 0;
+            isGrounded = true;
+
+        }else{
+            isGrounded = false;
+        }
+
+        transform.position = targetPosition;
+        
+    }
+
 }

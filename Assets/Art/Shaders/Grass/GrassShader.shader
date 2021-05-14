@@ -291,9 +291,9 @@
 	float4 baseColor = lerp(_BottomColor, _TopColor, saturate(i.uv.y)) * float4(i.diffuseColor, 1);
 
 	// multiply with lighting color
-	float4 litColor = (baseColor * float4(mainLight.color,1));
+	float4 litColor = baseColor * float4(mainLight.color,1);
 
-	litColor -= float4(extraLights,1);
+	litColor += float4(extraLights,1);
 	// multiply with vertex color, and shadows
 	float4 final = litColor * shadow;
 	// add in basecolor when lights turned down
