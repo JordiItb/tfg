@@ -29,6 +29,9 @@ public class InputManager : MonoBehaviour
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float mouseWheel;
 
+    public float scene1;
+    public float scene2;
+
     private void Awake(){
         
         animatorManager = GetComponent<AnimatorManager>();
@@ -62,6 +65,10 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerMovement.Teleport.performed += i => isTeleporting = i.ReadValue<float>(); //Records if player is teleporting.
             playerControls.PlayerMovement.Wave.performed += i => isWaving = i.ReadValue<float>(); //Records if player is waving.
             playerControls.PlayerMovement.Zoom.performed += i => mouseWheel = i.ReadValue<Vector2>().y; //Records y value from the scroll wheel.
+
+            //Debugs actions
+            playerControls.DebugActions.Scene1.performed += i => scene1 = i.ReadValue<float>();
+            playerControls.DebugActions.Scene2.performed += i => scene2 = i.ReadValue<float>();
 
 
         }

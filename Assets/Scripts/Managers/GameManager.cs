@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public Text fpsText;
 
     PlayerManager playerManager;
+    InputManager inputManager;
     Volume volume;
     Vignette vignette;
     
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
 
         photoreceptionSystem = FindObjectOfType<PhotoreceptionSystem>();
         playerManager = FindObjectOfType<PlayerManager>();
+        inputManager = FindObjectOfType<InputManager>();
         volume = FindObjectOfType<Volume>();
 
     }
@@ -52,6 +54,13 @@ public class GameManager : MonoBehaviour
 
         if(playerManager.health <= 0f){
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        if(inputManager.scene1 == 1f){
+            SceneManager.LoadScene(0);
+        }
+        if(inputManager.scene2 == 1f){
+            SceneManager.LoadScene(1);
         }
 
     }

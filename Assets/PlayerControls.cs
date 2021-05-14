@@ -467,6 +467,52 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Debug Actions"",
+            ""id"": ""9d3fc9be-fcb9-455e-b956-70dbf3daf4ab"",
+            ""actions"": [
+                {
+                    ""name"": ""Scene 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""b9d1d7fe-bff9-4a12-80a3-42c94a328f27"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Scene 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""9385b797-ee73-4923-9d46-2d5916980adf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""72446b2a-4c59-4bce-80e8-b6578c44be64"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scene 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba5044d6-666c-4eef-9084-5c8232274711"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scene 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -482,6 +528,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerMovement_Teleport = m_PlayerMovement.FindAction("Teleport", throwIfNotFound: true);
         m_PlayerMovement_Wave = m_PlayerMovement.FindAction("Wave", throwIfNotFound: true);
         m_PlayerMovement_Zoom = m_PlayerMovement.FindAction("Zoom", throwIfNotFound: true);
+        // Debug Actions
+        m_DebugActions = asset.FindActionMap("Debug Actions", throwIfNotFound: true);
+        m_DebugActions_Scene1 = m_DebugActions.FindAction("Scene 1", throwIfNotFound: true);
+        m_DebugActions_Scene2 = m_DebugActions.FindAction("Scene 2", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -624,6 +674,47 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         }
     }
     public PlayerMovementActions @PlayerMovement => new PlayerMovementActions(this);
+
+    // Debug Actions
+    private readonly InputActionMap m_DebugActions;
+    private IDebugActionsActions m_DebugActionsActionsCallbackInterface;
+    private readonly InputAction m_DebugActions_Scene1;
+    private readonly InputAction m_DebugActions_Scene2;
+    public struct DebugActionsActions
+    {
+        private @PlayerControls m_Wrapper;
+        public DebugActionsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Scene1 => m_Wrapper.m_DebugActions_Scene1;
+        public InputAction @Scene2 => m_Wrapper.m_DebugActions_Scene2;
+        public InputActionMap Get() { return m_Wrapper.m_DebugActions; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebugActionsActions set) { return set.Get(); }
+        public void SetCallbacks(IDebugActionsActions instance)
+        {
+            if (m_Wrapper.m_DebugActionsActionsCallbackInterface != null)
+            {
+                @Scene1.started -= m_Wrapper.m_DebugActionsActionsCallbackInterface.OnScene1;
+                @Scene1.performed -= m_Wrapper.m_DebugActionsActionsCallbackInterface.OnScene1;
+                @Scene1.canceled -= m_Wrapper.m_DebugActionsActionsCallbackInterface.OnScene1;
+                @Scene2.started -= m_Wrapper.m_DebugActionsActionsCallbackInterface.OnScene2;
+                @Scene2.performed -= m_Wrapper.m_DebugActionsActionsCallbackInterface.OnScene2;
+                @Scene2.canceled -= m_Wrapper.m_DebugActionsActionsCallbackInterface.OnScene2;
+            }
+            m_Wrapper.m_DebugActionsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Scene1.started += instance.OnScene1;
+                @Scene1.performed += instance.OnScene1;
+                @Scene1.canceled += instance.OnScene1;
+                @Scene2.started += instance.OnScene2;
+                @Scene2.performed += instance.OnScene2;
+                @Scene2.canceled += instance.OnScene2;
+            }
+        }
+    }
+    public DebugActionsActions @DebugActions => new DebugActionsActions(this);
     public interface IPlayerMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -635,5 +726,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnTeleport(InputAction.CallbackContext context);
         void OnWave(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
+    }
+    public interface IDebugActionsActions
+    {
+        void OnScene1(InputAction.CallbackContext context);
+        void OnScene2(InputAction.CallbackContext context);
     }
 }

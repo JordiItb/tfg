@@ -454,6 +454,52 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Debug Actions",
+            "id": "9d3fc9be-fcb9-455e-b956-70dbf3daf4ab",
+            "actions": [
+                {
+                    "name": "Scene 1",
+                    "type": "Button",
+                    "id": "b9d1d7fe-bff9-4a12-80a3-42c94a328f27",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Scene 2",
+                    "type": "Button",
+                    "id": "9385b797-ee73-4923-9d46-2d5916980adf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "72446b2a-4c59-4bce-80e8-b6578c44be64",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scene 1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba5044d6-666c-4eef-9084-5c8232274711",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scene 2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
