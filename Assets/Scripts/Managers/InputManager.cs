@@ -60,11 +60,12 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerMovement.Camera.performed += i => cameraInput = i.ReadValue<Vector2>(); //Records mouse movement.
             playerControls.PlayerMovement.Running.performed += i => isRunning = i.ReadValue<float>(); //Records if player is running.
             playerControls.PlayerMovement.Crouch.performed += i  => isCrouching = i.ReadValue<float>(); //Records if player is crouching.
-            playerControls.PlayerMovement.Concentrate.performed += i => isConcentrating = i.ReadValue<float>(); //Records if player is concentrating.
-            playerControls.PlayerMovement.Grab.performed += i => isGrabbing = i.ReadValue<float>(); //Records if player is grabbing.
-            playerControls.PlayerMovement.Teleport.performed += i => isTeleporting = i.ReadValue<float>(); //Records if player is teleporting.
-            playerControls.PlayerMovement.Wave.performed += i => isWaving = i.ReadValue<float>(); //Records if player is waving.
-            playerControls.PlayerMovement.Zoom.performed += i => mouseWheel = i.ReadValue<Vector2>().y; //Records y value from the scroll wheel.
+            
+            playerControls.PlayerHabilities.Concentrate.performed += i => isConcentrating = i.ReadValue<float>(); //Records if player is concentrating.
+            playerControls.PlayerHabilities.Grab.performed += i => isGrabbing = i.ReadValue<float>(); //Records if player is grabbing.
+            playerControls.PlayerHabilities.Teleport.performed += i => isTeleporting = i.ReadValue<float>(); //Records if player is teleporting.
+            playerControls.PlayerHabilities.Wave.performed += i => isWaving = i.ReadValue<float>(); //Records if player is waving.
+            playerControls.PlayerHabilities.Zoom.performed += i => mouseWheel = i.ReadValue<Vector2>().y; //Records y value from the scroll wheel.
 
             //Debugs actions
             playerControls.DebugActions.Scene1.performed += i => scene1 = i.ReadValue<float>();

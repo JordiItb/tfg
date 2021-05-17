@@ -49,46 +49,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""Concentrate"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""108eb958-524c-410f-9a30-4a5a197763ae"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Grab"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""5ce28a28-dcb1-46ca-b44d-261bd08928e3"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Teleport"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""5dba4763-1cdc-4b82-9497-739fa00e6448"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Wave"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""3f19eff0-a5e5-4568-9f42-7fba3481882f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Zoom"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""bf4f08ee-0f3c-4b1e-8bc8-f5de51eeaeaf"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -203,8 +163,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""4003a483-75e2-41e8-9a29-4f830dd1c58d"",
+                    ""name"": ""VR Controller"",
+                    ""id"": ""fbe53987-18f7-4b61-9499-c022c70e70ed"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -215,7 +175,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""up"",
-                    ""id"": ""45fdc254-ea6d-4f9a-bfab-aa1147a44f05"",
+                    ""id"": ""eb1f327f-facf-420d-afcb-d44ff105af4a"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -226,7 +186,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""down"",
-                    ""id"": ""48d84206-f4b3-4545-9e51-d8c4fa4feed2"",
+                    ""id"": ""381768ab-a063-47af-8126-1ee801355f72"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -237,7 +197,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""left"",
-                    ""id"": ""d8fb22f9-1702-4ce5-9ca8-0b9c6226d394"",
+                    ""id"": ""c44f8fc3-454c-47b8-8b27-524d6bea9c45"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -248,7 +208,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""right"",
-                    ""id"": ""b537cbd6-10e0-468c-aec1-72e42b6eb84e"",
+                    ""id"": ""009bc3d2-d92d-4a65-b2b2-35cd7179fb44"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -256,6 +216,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a5d8be0-c263-4abf-b34e-95e39e98d7b4"",
+                    ""path"": ""<XRSimulatedController>{LeftHand}/primary2DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c52f058-1141-4e87-aa72-b4fc719d43c0"",
+                    ""path"": ""<XRController>{LeftHand}/Primary2DAxis"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": ""Continuous Move"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -366,10 +348,58 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Player Habilities"",
+            ""id"": ""fed4b7bd-ebf3-4066-8e83-6fe636aca071"",
+            ""actions"": [
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""3dd45d18-efb2-4e67-9de9-a27eb989bf0a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 },
                 {
+                    ""name"": ""Wave"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""6ebe2d9e-6b27-46ac-9723-bcef03dc5b7c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Teleport"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""3db296b6-ab79-4d3f-b3d6-593f57e55259"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""d75ac0ff-1cf6-4e81-b7c5-74a12226dedc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Concentrate"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""edea6586-2508-4ae4-a2a9-6072f3b45ee3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
                     ""name"": """",
-                    ""id"": ""57b5a077-c0bf-4825-a578-1395c1b426dc"",
+                    ""id"": ""ea86a680-1050-43a5-a210-f6329ea4f471"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -380,7 +410,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""45afcae2-f8ab-43bd-badc-e58eb787919a"",
+                    ""id"": ""dd654a06-88b8-47c9-8e7a-8f412920bc7d"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -391,7 +421,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fc7ba93e-f556-4712-8c21-6e23a172a6a5"",
+                    ""id"": ""71c0d6f7-ba6e-4705-a23b-3562ef51a7fb"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -402,7 +432,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""231c00dc-8e51-4a5f-9d8b-b86e9a5d2341"",
+                    ""id"": ""3dd15a57-ac99-4015-b654-0d5404282873"",
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -413,7 +443,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""d45539ef-80ff-44ad-b123-a8468066250c"",
+                    ""id"": ""15d03c36-4e4b-4f68-a91a-174834418c57"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -424,7 +454,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b765f861-5eec-4580-8f09-69a5cfd540f2"",
+                    ""id"": ""daf05087-b2c3-4945-8f95-b33618227af7"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -435,7 +465,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a6ee8689-c25d-4043-a881-addd534fe007"",
+                    ""id"": ""e32eec47-09d7-4435-bc84-2a77af0e7fd7"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -446,7 +476,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ccf2fa03-75b3-4012-8e80-2dce7223d7fe"",
+                    ""id"": ""b70188ef-4913-4100-889a-a03ae33fb182"",
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -457,7 +487,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""94488f10-e3f7-4fc9-9c7e-b1b8d56906fa"",
+                    ""id"": ""340de614-d41b-4714-8a76-4c2b3b6976aa"",
                     ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -523,11 +553,13 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerMovement_Camera = m_PlayerMovement.FindAction("Camera", throwIfNotFound: true);
         m_PlayerMovement_Running = m_PlayerMovement.FindAction("Running", throwIfNotFound: true);
         m_PlayerMovement_Crouch = m_PlayerMovement.FindAction("Crouch", throwIfNotFound: true);
-        m_PlayerMovement_Concentrate = m_PlayerMovement.FindAction("Concentrate", throwIfNotFound: true);
-        m_PlayerMovement_Grab = m_PlayerMovement.FindAction("Grab", throwIfNotFound: true);
-        m_PlayerMovement_Teleport = m_PlayerMovement.FindAction("Teleport", throwIfNotFound: true);
-        m_PlayerMovement_Wave = m_PlayerMovement.FindAction("Wave", throwIfNotFound: true);
-        m_PlayerMovement_Zoom = m_PlayerMovement.FindAction("Zoom", throwIfNotFound: true);
+        // Player Habilities
+        m_PlayerHabilities = asset.FindActionMap("Player Habilities", throwIfNotFound: true);
+        m_PlayerHabilities_Zoom = m_PlayerHabilities.FindAction("Zoom", throwIfNotFound: true);
+        m_PlayerHabilities_Wave = m_PlayerHabilities.FindAction("Wave", throwIfNotFound: true);
+        m_PlayerHabilities_Teleport = m_PlayerHabilities.FindAction("Teleport", throwIfNotFound: true);
+        m_PlayerHabilities_Grab = m_PlayerHabilities.FindAction("Grab", throwIfNotFound: true);
+        m_PlayerHabilities_Concentrate = m_PlayerHabilities.FindAction("Concentrate", throwIfNotFound: true);
         // Debug Actions
         m_DebugActions = asset.FindActionMap("Debug Actions", throwIfNotFound: true);
         m_DebugActions_Scene1 = m_DebugActions.FindAction("Scene 1", throwIfNotFound: true);
@@ -585,11 +617,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerMovement_Camera;
     private readonly InputAction m_PlayerMovement_Running;
     private readonly InputAction m_PlayerMovement_Crouch;
-    private readonly InputAction m_PlayerMovement_Concentrate;
-    private readonly InputAction m_PlayerMovement_Grab;
-    private readonly InputAction m_PlayerMovement_Teleport;
-    private readonly InputAction m_PlayerMovement_Wave;
-    private readonly InputAction m_PlayerMovement_Zoom;
     public struct PlayerMovementActions
     {
         private @PlayerControls m_Wrapper;
@@ -598,11 +625,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Camera => m_Wrapper.m_PlayerMovement_Camera;
         public InputAction @Running => m_Wrapper.m_PlayerMovement_Running;
         public InputAction @Crouch => m_Wrapper.m_PlayerMovement_Crouch;
-        public InputAction @Concentrate => m_Wrapper.m_PlayerMovement_Concentrate;
-        public InputAction @Grab => m_Wrapper.m_PlayerMovement_Grab;
-        public InputAction @Teleport => m_Wrapper.m_PlayerMovement_Teleport;
-        public InputAction @Wave => m_Wrapper.m_PlayerMovement_Wave;
-        public InputAction @Zoom => m_Wrapper.m_PlayerMovement_Zoom;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -624,21 +646,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Crouch.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnCrouch;
                 @Crouch.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnCrouch;
                 @Crouch.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnCrouch;
-                @Concentrate.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnConcentrate;
-                @Concentrate.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnConcentrate;
-                @Concentrate.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnConcentrate;
-                @Grab.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnGrab;
-                @Grab.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnGrab;
-                @Grab.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnGrab;
-                @Teleport.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
-                @Teleport.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
-                @Teleport.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnTeleport;
-                @Wave.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
-                @Wave.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
-                @Wave.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnWave;
-                @Zoom.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnZoom;
-                @Zoom.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnZoom;
-                @Zoom.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnZoom;
             }
             m_Wrapper.m_PlayerMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -655,25 +662,75 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
-                @Concentrate.started += instance.OnConcentrate;
-                @Concentrate.performed += instance.OnConcentrate;
-                @Concentrate.canceled += instance.OnConcentrate;
-                @Grab.started += instance.OnGrab;
-                @Grab.performed += instance.OnGrab;
-                @Grab.canceled += instance.OnGrab;
-                @Teleport.started += instance.OnTeleport;
-                @Teleport.performed += instance.OnTeleport;
-                @Teleport.canceled += instance.OnTeleport;
-                @Wave.started += instance.OnWave;
-                @Wave.performed += instance.OnWave;
-                @Wave.canceled += instance.OnWave;
-                @Zoom.started += instance.OnZoom;
-                @Zoom.performed += instance.OnZoom;
-                @Zoom.canceled += instance.OnZoom;
             }
         }
     }
     public PlayerMovementActions @PlayerMovement => new PlayerMovementActions(this);
+
+    // Player Habilities
+    private readonly InputActionMap m_PlayerHabilities;
+    private IPlayerHabilitiesActions m_PlayerHabilitiesActionsCallbackInterface;
+    private readonly InputAction m_PlayerHabilities_Zoom;
+    private readonly InputAction m_PlayerHabilities_Wave;
+    private readonly InputAction m_PlayerHabilities_Teleport;
+    private readonly InputAction m_PlayerHabilities_Grab;
+    private readonly InputAction m_PlayerHabilities_Concentrate;
+    public struct PlayerHabilitiesActions
+    {
+        private @PlayerControls m_Wrapper;
+        public PlayerHabilitiesActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Zoom => m_Wrapper.m_PlayerHabilities_Zoom;
+        public InputAction @Wave => m_Wrapper.m_PlayerHabilities_Wave;
+        public InputAction @Teleport => m_Wrapper.m_PlayerHabilities_Teleport;
+        public InputAction @Grab => m_Wrapper.m_PlayerHabilities_Grab;
+        public InputAction @Concentrate => m_Wrapper.m_PlayerHabilities_Concentrate;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerHabilities; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerHabilitiesActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerHabilitiesActions instance)
+        {
+            if (m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface != null)
+            {
+                @Zoom.started -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnZoom;
+                @Zoom.performed -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnZoom;
+                @Zoom.canceled -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnZoom;
+                @Wave.started -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnWave;
+                @Wave.performed -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnWave;
+                @Wave.canceled -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnWave;
+                @Teleport.started -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnTeleport;
+                @Teleport.performed -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnTeleport;
+                @Teleport.canceled -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnTeleport;
+                @Grab.started -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnGrab;
+                @Grab.performed -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnGrab;
+                @Grab.canceled -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnGrab;
+                @Concentrate.started -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnConcentrate;
+                @Concentrate.performed -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnConcentrate;
+                @Concentrate.canceled -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnConcentrate;
+            }
+            m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Zoom.started += instance.OnZoom;
+                @Zoom.performed += instance.OnZoom;
+                @Zoom.canceled += instance.OnZoom;
+                @Wave.started += instance.OnWave;
+                @Wave.performed += instance.OnWave;
+                @Wave.canceled += instance.OnWave;
+                @Teleport.started += instance.OnTeleport;
+                @Teleport.performed += instance.OnTeleport;
+                @Teleport.canceled += instance.OnTeleport;
+                @Grab.started += instance.OnGrab;
+                @Grab.performed += instance.OnGrab;
+                @Grab.canceled += instance.OnGrab;
+                @Concentrate.started += instance.OnConcentrate;
+                @Concentrate.performed += instance.OnConcentrate;
+                @Concentrate.canceled += instance.OnConcentrate;
+            }
+        }
+    }
+    public PlayerHabilitiesActions @PlayerHabilities => new PlayerHabilitiesActions(this);
 
     // Debug Actions
     private readonly InputActionMap m_DebugActions;
@@ -721,11 +778,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnCamera(InputAction.CallbackContext context);
         void OnRunning(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
-        void OnConcentrate(InputAction.CallbackContext context);
-        void OnGrab(InputAction.CallbackContext context);
-        void OnTeleport(InputAction.CallbackContext context);
-        void OnWave(InputAction.CallbackContext context);
+    }
+    public interface IPlayerHabilitiesActions
+    {
         void OnZoom(InputAction.CallbackContext context);
+        void OnWave(InputAction.CallbackContext context);
+        void OnTeleport(InputAction.CallbackContext context);
+        void OnGrab(InputAction.CallbackContext context);
+        void OnConcentrate(InputAction.CallbackContext context);
     }
     public interface IDebugActionsActions
     {
