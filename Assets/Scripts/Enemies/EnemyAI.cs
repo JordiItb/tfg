@@ -85,7 +85,7 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-    void OnCollisionEnter(Collision collision){
+    void OnTriggerEnter(Collider collision){
 
         if(collision.gameObject.layer == 13){
             ChangePosition();

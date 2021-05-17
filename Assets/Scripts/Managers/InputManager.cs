@@ -28,9 +28,9 @@ public class InputManager : MonoBehaviour
     [HideInInspector] public float verticalInput;
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float mouseWheel;
-
-    public float scene1;
-    public float scene2;
+    [HideInInspector]public float scene1;
+    [HideInInspector]public float scene2;
+    public float speedMultiplier;
 
     private void Awake(){
         
@@ -148,6 +148,10 @@ public class InputManager : MonoBehaviour
             verticalInput = 1f;
             horizontalInput = 0f;
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput)) / movementDivider;
+        }
+
+        if(photoreceptionSystem.lightValue >= 0.05f){
+            moveAmount = moveAmount / photoreceptionSystem.lightValue * speedMultiplier;
         }
 
         animatorManager.UpdateAnimatorValues(0, moveAmount, crouch, concentrating);

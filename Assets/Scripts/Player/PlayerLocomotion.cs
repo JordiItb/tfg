@@ -7,6 +7,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     InputManager inputManager;
     PlayerHabilities playerHabilities;
+    PhotoreceptionSystem photoreception;
 
     [SerializeField] Vector3 moveDirection;
     Transform cameraObject;
@@ -18,6 +19,7 @@ public class PlayerLocomotion : MonoBehaviour
     [Range(5, 15)] public float runningSpeed;
     [Range(0, 1)] public float crouchingSpeed;
     [Range(0, 40)] public float rotationSpeed;
+    [Range(0,0.1f)]public float speedMultiplier;
 
     [Header("Fall")]
     public float inAirTime;
@@ -40,6 +42,7 @@ public class PlayerLocomotion : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         rb = GetComponent<Rigidbody>();
         playerHabilities = GetComponent<PlayerHabilities>();
+        photoreception = FindObjectOfType<PhotoreceptionSystem>();
 
         cameraObject = Camera.main.transform;
 
@@ -59,9 +62,11 @@ public class PlayerLocomotion : MonoBehaviour
     }
 
     private void HandleMovement(){
+
         //If player is tping, movement is disabled.
         if(!playerHabilities.tping){
-            if(inputManager.isConcentrating == 1){
+            //If player is concentrating, movement is disabled.
+            if(inputManager.isConcentrating == 1f){
                 rb.velocity = Vector3.zero;
             }
             else if(isGrounded){
@@ -89,6 +94,7 @@ public class PlayerLocomotion : MonoBehaviour
                         normalCollider.enabled = true;
                         crouchCollider.enabled = false;
                     }
+
                     #region Detection of upper objects when crouching.
                     if(inputManager.isCrouching == 1f || crouch){
 
@@ -99,14 +105,24 @@ public class PlayerLocomotion : MonoBehaviour
                             inputManager.isCrouching = 1f;
                             crouch = true;
 
-                        }else if(crouch){
-                            inputManager.isCrouching = 0f;
-                            crouch = false;
+                        }else{
+                            if(crouch){
+                                inputManager.isCrouching = 0f;
+                                crouch = false;
+                            }
+                            
                         }
                     }
+                    Vector3 movementVelocity;
                     #endregion
+                    if(photoreception.lightValue >= 0.05f){
+                        movementVelocity = moveDirection / photoreception.lightValue * speedMultiplier;
+                    }else{
+                        movementVelocity = moveDirection;
+                    }
                     
-                    Vector3 movementVelocity = moveDirection;
+                    
+
                 #endregion
                 rb.velocity = movementVelocity; //Moves player according to the calculation above.
             }
@@ -148,11 +164,11 @@ public class PlayerLocomotion : MonoBehaviour
         if(!isGrounded){
 
             inAirTime = inAirTime + Time.deltaTime;
-            rb.AddForce(transform.forward * leapingVelocity);
-            rb.AddForce(Vector3.down * fallingSpeed * inAirTime);
+            rb.AddForce(transform.forward * leapingVelocity); //Makes player do a little jump to simulate momentum.
+            rb.AddForce(Vector3.down * fallingSpeed * inAirTime); //Makes player fall when not grounded.
 
         }
-
+        //Casts a sphere at the player feet in order to check if it's colliding with the ground layer.
         if(Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, 0.5f, groundMask)){
 
             Vector3 rayCastHitPoint = hit.point;

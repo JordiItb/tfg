@@ -68,10 +68,5 @@ public class PhotoreceptionSystem : MonoBehaviour
         }
 
     }
-
-    public float getLightValue(){
-
-        return lightValue;
-
-    }
+    
 }
