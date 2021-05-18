@@ -116,6 +116,7 @@ public class PlayerLocomotion : MonoBehaviour
                     Vector3 movementVelocity;
                     #endregion
                     if(photoreception.lightValue >= 0.05f){
+   
                         movementVelocity = moveDirection / photoreception.lightValue * speedMultiplier;
                     }else{
                         movementVelocity = moveDirection;
