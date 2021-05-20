@@ -18,7 +18,7 @@ public class ArtificialLightManager : MonoBehaviour
 
     void OnCollisionEnter(Collision collision){
 
-        if(collision.collider.CompareTag("Interactuable") && GetComponent<Light>().enabled == true){
+        if(collision.collider.CompareTag("Interactuable") || collision.collider.GetComponent<EnemyAI>() && GetComponent<Light>().enabled == true){
 
             GetComponent<ParticleSystem>().Play(true);
 

@@ -54,8 +54,6 @@ public class EnemyAI : MonoBehaviour
 
     void OnTriggerEnter(Collider collision){
 
-        Debug.Log(collision.gameObject);
-
         if(collision.gameObject.layer == 13 && collision.gameObject == trackPoints[currentPoint].gameObject){
             ChangePosition();
         }

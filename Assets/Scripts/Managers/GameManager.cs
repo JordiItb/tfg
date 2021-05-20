@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     PhotoreceptionSystem photoreceptionSystem;
     public Text lightText;
     public Text fpsText;
+    public Text helperText;
+    public GameObject helperPanel;
+    bool textActive;
 
     PlayerManager playerManager;
     InputManager inputManager;
@@ -37,6 +40,7 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         volume.profile.TryGet(out vignette);
+        textActive = false;
     }
 
     void Update(){
@@ -62,6 +66,16 @@ public class GameManager : MonoBehaviour
         if(inputManager.scene2 == 1f){
             SceneManager.LoadScene(1);
         }
+
+    }
+
+    public void setHelperText(string text){
+        
+        helperPanel.SetActive(false);
+        helperPanel.SetActive(true);
+        helperText.enabled = true;
+        helperText.text = text;
+        textActive = true;
 
     }
 

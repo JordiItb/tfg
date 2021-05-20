@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerHabilities : MonoBehaviour
 {
+    GameManager gameManager;
     InputManager inputManager;
     PhotoreceptionSystem photoreception;
     Material defMat;
@@ -44,7 +45,8 @@ public class PlayerHabilities : MonoBehaviour
     void Start()
     {
         inputManager = GetComponent<InputManager>();
-        photoreception = GameObject.FindObjectOfType<PhotoreceptionSystem>().GetComponent<PhotoreceptionSystem>();
+        photoreception = FindObjectOfType<PhotoreceptionSystem>();
+        gameManager = FindObjectOfType<GameManager>();
         hovered = false;
         grabZoom = grabPos.position.z;
         waveCooldown = 0f;
@@ -73,7 +75,7 @@ public class PlayerHabilities : MonoBehaviour
                     //Checks if the player is already grabbing something, in order to prevent multiple grabbing.
                     if(!grabbing){
                         //Checks if the object is interactuable.
-                        if(hit.collider.CompareTag("Interactuable")){
+                        if(hit.collider.CompareTag("Interactuable") || hit.collider.GetComponent<EnemyAI>()){
 
                             particles[2].Stop();
 
@@ -188,6 +190,11 @@ public class PlayerHabilities : MonoBehaviour
     }
 
     void moveObject(GameObject grabObj){
+        
+        if(grabObj.GetComponent<EnemyAI>()){
+            grabObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            grabObj.GetComponent<EnemyAI>().enabled = false;
+        }
 
         grabObj.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
@@ -211,18 +218,37 @@ public class PlayerHabilities : MonoBehaviour
 
         //If the player perfoms the action of pulse waving when concentrating, adds a force to the selected object.        
         if(inputManager.isConcentrating == 1f && inputManager.isWaving == 1f && Time.time >= waveCooldown){
-
-            obj.GetComponent<Rigidbody>().AddForce((Camera.main.transform.forward + Vector3.up / 2f) * waveForce, ForceMode.Impulse);
-            obj.GetComponent<Rigidbody>().useGravity = true;
-            obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            obj.GetComponent<MeshRenderer>().material = defMat;
-            grabbing = false;
-            hovered = false;
-            hitObject = null;
-
-            waveCooldown = Time.time + waveSeconds;
-
+            //Checks if the object has the locked door script
+            if(obj.GetComponent<LockedDoor>()){
+                //Checks if the door is locked
+                if(!obj.GetComponent<LockedDoor>().GetLocked()){
+                    ThrowObject(obj);
+                }else{
+                    Debug.Log("cerrada.");
+                    gameManager.setHelperText(obj.GetComponent<LockedDoor>().GetText());
+                }
+            }else if(obj.GetComponent<EnemyAI>()){
+                obj.GetComponentInChildren<Light>().enabled = false;
+                obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                obj.GetComponent<EnemyAI>().enabled = false;
+                ThrowObject(obj);
+            }else{
+                ThrowObject(obj);
+            }
         }
+    }
+
+    public void ThrowObject(GameObject obj){
+
+        obj.GetComponent<Rigidbody>().AddForce((Camera.main.transform.forward + Vector3.up / 2f) * waveForce, ForceMode.Impulse);
+        obj.GetComponent<Rigidbody>().useGravity = true;
+        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        obj.GetComponent<MeshRenderer>().material = defMat;
+        grabbing = false;
+        hovered = false;
+        hitObject = null;
+
+        waveCooldown = Time.time + waveSeconds;
 
     }
 
