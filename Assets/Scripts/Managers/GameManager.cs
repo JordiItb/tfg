@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,11 +16,19 @@ public class GameManager : MonoBehaviour
     private int m_CurrentFps;
 
     PhotoreceptionSystem photoreceptionSystem;
+    [Header("Debug")]
     public Text lightText;
     public Text fpsText;
+    [Header("Helper Panel")]
     public Text helperText;
     public GameObject helperPanel;
-    bool textActive;
+    [Header("Interact Panel")]
+    public GameObject interactPanel;
+    public Text interactText;
+    public string intreactKey;
+
+    bool gamepad;
+    bool keyboard;
 
     PlayerManager playerManager;
     InputManager inputManager;
@@ -40,10 +49,11 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         volume.profile.TryGet(out vignette);
-        textActive = false;
     }
 
     void Update(){
+        
+    #if UNITY_EDITOR
 
         lightText.text = "Light Value: " + photoreceptionSystem.lightValue;
         m_FpsAccumulator++;
@@ -54,28 +64,76 @@ public class GameManager : MonoBehaviour
             fpsText.text = "FPS: " + m_CurrentFps;
         }
 
-        vignette.intensity.value = (-playerManager.health / 100f) + 1f;
-
-        if(playerManager.health <= 0f){
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
         if(inputManager.scene1 == 1f){
             SceneManager.LoadScene(0);
         }
         if(inputManager.scene2 == 1f){
             SceneManager.LoadScene(1);
         }
+    
+    #endif
+
+        vignette.intensity.value = (-playerManager.health / 100f) + 1f;
+
+        if(playerManager.health <= 0f){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+    if(Gamepad.current.IsActuated() && !gamepad){
+        intreactKey =  "B";
+        keyboard = false;
+        gamepad = true;
+    }else if(Keyboard.current.IsActuated() && !keyboard){
+        intreactKey =  "F";
+        gamepad = false;
+        keyboard = true;
+    }
 
     }
 
     public void setHelperText(string text){
         
-        helperPanel.SetActive(false);
-        helperPanel.SetActive(true);
-        helperText.enabled = true;
-        helperText.text = text;
-        textActive = true;
+        SetText(helperPanel, helperText, text);
+
+    }
+
+    public void Interact(GameObject obj){
+        
+        if(obj.GetComponent<Key>()){
+            
+            SetInteracText("[" + intreactKey + "] To Pick Up Key");
+            if(inputManager.isPicking == 1f){
+                obj.GetComponent<Key>().PickUp();
+            }
+
+        }else if(obj.GetComponent<LockedDoor>()){
+
+            SetInteracText("["+ intreactKey + "] To Open Door");
+            if(inputManager.isPicking == 1f){
+                obj.GetComponent<LockedDoor>().OpenDoor();
+            }
+
+        }
+
+    }
+
+    public void HideInteractText(){
+
+        interactPanel.SetActive(false);
+
+    }
+
+    void SetInteracText(string text){
+
+        SetText(interactPanel, interactText, text);
+
+    }
+
+    void SetText(GameObject panel, Text text, string inputText){
+        
+        panel.SetActive(false);
+        panel.SetActive(true);
+        text.text = inputText;
 
     }
 

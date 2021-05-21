@@ -7,24 +7,42 @@ public class Key : MonoBehaviour
     public GameObject door;
     public string text;
     private GameManager gm;
+    public bool picked;
 
     void Start(){
 
         gm = FindObjectOfType<GameManager>();
+        picked = false;
 
     }
 
-    void OnTriggerEnter(Collider collider){
+    void OnTriggerStay(Collider collider){
 
         if(collider.gameObject.tag == "Player"){
 
-            door.GetComponent<LockedDoor>().SetLocked(false);
-
-            gm.setHelperText(text);
-
-            Destroy(this.gameObject);
+            gm.Interact(this.gameObject);
 
         }
+
+    }
+
+    void OnTriggerExit(Collider collider){
+
+        if(collider.gameObject.tag == "Player"){
+            gm.HideInteractText();
+        }
+
+    }
+
+    public void PickUp(){
+
+        gm.setHelperText(text);
+
+        picked = true;
+
+        gm.HideInteractText();
+
+        this.gameObject.SetActive(false);
 
     }
 

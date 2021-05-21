@@ -163,72 +163,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""VR Controller"",
-                    ""id"": ""fbe53987-18f7-4b61-9499-c022c70e70ed"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""eb1f327f-facf-420d-afcb-d44ff105af4a"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""381768ab-a063-47af-8126-1ee801355f72"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""c44f8fc3-454c-47b8-8b27-524d6bea9c45"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""009bc3d2-d92d-4a65-b2b2-35cd7179fb44"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3a5d8be0-c263-4abf-b34e-95e39e98d7b4"",
-                    ""path"": ""<XRSimulatedController>{LeftHand}/primary2DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": """",
                     ""id"": ""5c52f058-1141-4e87-aa72-b4fc719d43c0"",
                     ""path"": ""<XRController>{LeftHand}/Primary2DAxis"",
@@ -394,6 +328,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Pick Up"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""32903d33-e391-4633-ab1f-dfbe209e3ef6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -495,6 +437,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d2496dc-a05e-420a-b61e-3ffc484521a1"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pick Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48235c98-4c1e-43be-a549-e6114b941523"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pick Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -560,6 +524,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerHabilities_Teleport = m_PlayerHabilities.FindAction("Teleport", throwIfNotFound: true);
         m_PlayerHabilities_Grab = m_PlayerHabilities.FindAction("Grab", throwIfNotFound: true);
         m_PlayerHabilities_Concentrate = m_PlayerHabilities.FindAction("Concentrate", throwIfNotFound: true);
+        m_PlayerHabilities_PickUp = m_PlayerHabilities.FindAction("Pick Up", throwIfNotFound: true);
         // Debug Actions
         m_DebugActions = asset.FindActionMap("Debug Actions", throwIfNotFound: true);
         m_DebugActions_Scene1 = m_DebugActions.FindAction("Scene 1", throwIfNotFound: true);
@@ -675,6 +640,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerHabilities_Teleport;
     private readonly InputAction m_PlayerHabilities_Grab;
     private readonly InputAction m_PlayerHabilities_Concentrate;
+    private readonly InputAction m_PlayerHabilities_PickUp;
     public struct PlayerHabilitiesActions
     {
         private @PlayerControls m_Wrapper;
@@ -684,6 +650,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Teleport => m_Wrapper.m_PlayerHabilities_Teleport;
         public InputAction @Grab => m_Wrapper.m_PlayerHabilities_Grab;
         public InputAction @Concentrate => m_Wrapper.m_PlayerHabilities_Concentrate;
+        public InputAction @PickUp => m_Wrapper.m_PlayerHabilities_PickUp;
         public InputActionMap Get() { return m_Wrapper.m_PlayerHabilities; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -708,6 +675,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Concentrate.started -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnConcentrate;
                 @Concentrate.performed -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnConcentrate;
                 @Concentrate.canceled -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnConcentrate;
+                @PickUp.started -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnPickUp;
+                @PickUp.performed -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnPickUp;
+                @PickUp.canceled -= m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface.OnPickUp;
             }
             m_Wrapper.m_PlayerHabilitiesActionsCallbackInterface = instance;
             if (instance != null)
@@ -727,6 +697,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Concentrate.started += instance.OnConcentrate;
                 @Concentrate.performed += instance.OnConcentrate;
                 @Concentrate.canceled += instance.OnConcentrate;
+                @PickUp.started += instance.OnPickUp;
+                @PickUp.performed += instance.OnPickUp;
+                @PickUp.canceled += instance.OnPickUp;
             }
         }
     }
@@ -786,6 +759,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnTeleport(InputAction.CallbackContext context);
         void OnGrab(InputAction.CallbackContext context);
         void OnConcentrate(InputAction.CallbackContext context);
+        void OnPickUp(InputAction.CallbackContext context);
     }
     public interface IDebugActionsActions
     {

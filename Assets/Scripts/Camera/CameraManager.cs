@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraManager : MonoBehaviour
 {
@@ -69,9 +70,14 @@ public class CameraManager : MonoBehaviour
 
         Vector3 rotation;
         Quaternion targetRotation;
-
-        lookAngle = lookAngle + (inputManager.cameraInputX * cameraLookSpeed);
-        pivotAngle = pivotAngle - (inputManager.cameraInputY * cameraPivotSpeed);
+        if(Gamepad.current.IsActuated()){
+            lookAngle = lookAngle + (inputManager.cameraInputX * cameraLookSpeed * 10f);
+            pivotAngle = pivotAngle - (inputManager.cameraInputY * cameraPivotSpeed * 10f);
+        }
+        else{
+            lookAngle = lookAngle + (inputManager.cameraInputX * cameraLookSpeed);
+            pivotAngle = pivotAngle - (inputManager.cameraInputY * cameraPivotSpeed);
+        }
         if(inputManager.isConcentrating == 0f){
             pivotAngle = Mathf.Clamp(pivotAngle, minimumPivotAngle, maximumPivotAngle);
         }else{

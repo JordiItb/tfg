@@ -144,10 +144,12 @@ public class PlayerHabilities : MonoBehaviour
             pointer.SetActive(false);
 
             if(hitObject != null){
-
-               hitObject.GetComponent<Rigidbody>().useGravity = true; 
-               hitObject.GetComponent<MeshRenderer>().material = defMat;
-               hitObject = null;
+                if(hitObject.name != "Door"){
+                    hitObject.GetComponent<Rigidbody>().useGravity = true; 
+                    hitObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                }
+                hitObject.GetComponent<MeshRenderer>().material = defMat;
+                hitObject = null;
 
             }
 
@@ -224,9 +226,9 @@ public class PlayerHabilities : MonoBehaviour
                 if(!obj.GetComponent<LockedDoor>().GetLocked()){
                     ThrowObject(obj);
                 }else{
-                    Debug.Log("cerrada.");
                     gameManager.setHelperText(obj.GetComponent<LockedDoor>().GetText());
                 }
+            //Checks if the object is an enemy.
             }else if(obj.GetComponent<EnemyAI>()){
                 obj.GetComponentInChildren<Light>().enabled = false;
                 obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;

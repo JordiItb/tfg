@@ -20,6 +20,7 @@ public class InputManager : MonoBehaviour
     public float isTeleporting;
     public float isGrabbing;
     public float isWaving;
+    public float isPicking;
 
     [HideInInspector] public float cameraInputX;
     [HideInInspector] public float cameraInputY;
@@ -66,6 +67,7 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerHabilities.Teleport.performed += i => isTeleporting = i.ReadValue<float>(); //Records if player is teleporting.
             playerControls.PlayerHabilities.Wave.performed += i => isWaving = i.ReadValue<float>(); //Records if player is waving.
             playerControls.PlayerHabilities.Zoom.performed += i => mouseWheel = i.ReadValue<Vector2>().y; //Records y value from the scroll wheel.
+            playerControls.PlayerHabilities.PickUp.performed += i => isPicking = i.ReadValue<float>(); //Records if player wants to pick up an object;
 
             //Debugs actions
             playerControls.DebugActions.Scene1.performed += i => scene1 = i.ReadValue<float>();
