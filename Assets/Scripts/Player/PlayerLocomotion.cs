@@ -44,6 +44,10 @@ public class PlayerLocomotion : MonoBehaviour
         playerHabilities = GetComponent<PlayerHabilities>();
         photoreception = FindObjectOfType<PhotoreceptionSystem>();
 
+    }
+
+    void Start(){
+
         cameraObject = Camera.main.transform;
 
         normalCollider.enabled = true;

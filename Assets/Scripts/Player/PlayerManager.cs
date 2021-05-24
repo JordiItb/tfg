@@ -10,6 +10,8 @@ public class PlayerManager : MonoBehaviour
     PlayerLocomotion playerLocomotion;
     PlayerHabilities playerHabilities;
     PhotoreceptionSystem photoreception;
+    GameManager gameManager;
+    SoundManager soundManager;
     [Header("Life Settings")]
     public float maxHealth;
     public float health;
@@ -28,6 +30,8 @@ public class PlayerManager : MonoBehaviour
         playerLocomotion = GetComponent<PlayerLocomotion>();
         playerHabilities = GetComponent<PlayerHabilities>();
         photoreception = FindObjectOfType<PhotoreceptionSystem>();
+        soundManager = FindObjectOfType<SoundManager>();
+        gameManager = FindObjectOfType<GameManager>();
 
         health = maxHealth;
 
@@ -78,5 +82,14 @@ public class PlayerManager : MonoBehaviour
 
         }
 
+    }
+
+    void OnTriggerEnter(Collider collider){
+        if(collider.gameObject.tag == "SoundCollider"){
+            soundManager.SetCurrentStepSound(collider.GetComponent<AudioSource>());
+        }else if(collider.gameObject.tag == "Tutorial"){
+            gameManager.setHelperText(collider.GetComponent<Tutorial>().GetText());
+            Destroy(collider.gameObject);
+        }
     }
 }

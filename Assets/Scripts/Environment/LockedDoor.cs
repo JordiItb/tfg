@@ -12,12 +12,13 @@ public class LockedDoor : MonoBehaviour
     public string text;
     public Collider interactCollider;
 
-    void Start(){
+    void Awake(){
+        gameManager = FindObjectOfType<GameManager>();
+    }
 
+    void Start(){
         locked = true;
         text = "It won't open. I think i need a key.";
-        gameManager = FindObjectOfType<GameManager>();
-
     }
 
 

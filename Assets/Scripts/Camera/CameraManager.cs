@@ -32,6 +32,8 @@ public class CameraManager : MonoBehaviour
     public float concentrationMinimumPivotAngle;
     public float concentrationMaximumPivotAngle;
 
+    public bool locked;
+
 
     private void Awake(){
 
@@ -40,14 +42,17 @@ public class CameraManager : MonoBehaviour
         cameraTransform = Camera.main.transform;
         defaultPosition = cameraTransform.localPosition.z;
         cameraConcentrate = GameObject.Find("ConcentrateCamera").transform;
+        locked = false;
 
     }
 
     public void HandleAllCameraMovement(){
-
-        FollowTarget();
-        RotateCamera();
-        HandleCameraCollisions();
+        
+        if(!locked){
+            FollowTarget();
+            RotateCamera();
+            HandleCameraCollisions();
+        }
 
     }
 

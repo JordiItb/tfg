@@ -41,12 +41,15 @@ public class PlayerHabilities : MonoBehaviour
     [Header("Particles")]
     public ParticleSystem[] particles;
     public GameObject trajectoryParticles;
-    
-    void Start()
-    {
+
+    void Awake(){
         inputManager = GetComponent<InputManager>();
         photoreception = FindObjectOfType<PhotoreceptionSystem>();
         gameManager = FindObjectOfType<GameManager>();
+    }
+    
+    void Start()
+    {
         hovered = false;
         grabZoom = grabPos.position.z;
         waveCooldown = 0f;
@@ -144,10 +147,7 @@ public class PlayerHabilities : MonoBehaviour
             pointer.SetActive(false);
 
             if(hitObject != null){
-                if(hitObject.name != "Door"){
-                    hitObject.GetComponent<Rigidbody>().useGravity = true; 
-                    hitObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                }
+                hitObject.GetComponent<Rigidbody>().useGravity = true; 
                 hitObject.GetComponent<MeshRenderer>().material = defMat;
                 hitObject = null;
 
@@ -160,22 +160,24 @@ public class PlayerHabilities : MonoBehaviour
     }
 
     public void Grabbing(GameObject grabObj){
+        
+        if(grabObj.GetComponent<Rigidbody>().mass <= 1f){
+            //Grabbing object.
+            if(inputManager.isGrabbing == 1f && grabObj != null){
 
-        //Grabbing object.
-        if(inputManager.isGrabbing == 1f && grabObj != null){
+                grabbing = true;
 
-            grabbing = true;
-
-        }
-
-        if(grabbing){
-            
-            if(grabObj.name != "Door"){
-                moveObject(grabObj);
-
-                DrawTrajectory(grabObj);
             }
 
+            if(grabbing){
+                
+                if(grabObj.name != "Door"){
+                    moveObject(grabObj);
+
+                    DrawTrajectory(grabObj);
+                }
+
+            }
         }
         
 

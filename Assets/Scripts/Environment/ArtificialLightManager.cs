@@ -4,17 +4,6 @@ using UnityEngine;
 
 public class ArtificialLightManager : MonoBehaviour
 {
-    
-    void Start()
-    {
-        
-    }
-
-    
-    void Update()
-    {
-        
-    }
 
     void OnCollisionEnter(Collision collision){
 

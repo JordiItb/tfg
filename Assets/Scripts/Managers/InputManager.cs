@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
     
     PlayerControls playerControls;
     PlayerHabilities playerHabilities;
+    GameManager gameManager;
     [Header("Light")]
     public PhotoreceptionSystem photoreceptionSystem;
     [Range(0, 0.2f)]public float lightLevel;
@@ -21,6 +22,7 @@ public class InputManager : MonoBehaviour
     public float isGrabbing;
     public float isWaving;
     public float isPicking;
+    public float pause;
 
     [HideInInspector] public float cameraInputX;
     [HideInInspector] public float cameraInputY;
@@ -38,6 +40,7 @@ public class InputManager : MonoBehaviour
         animatorManager = GetComponent<AnimatorManager>();
         photoreceptionSystem = FindObjectOfType<PhotoreceptionSystem>();
         playerHabilities = FindObjectOfType<PlayerHabilities>();
+        gameManager = FindObjectOfType<GameManager>();
 
     }
 
@@ -69,6 +72,8 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerHabilities.Zoom.performed += i => mouseWheel = i.ReadValue<Vector2>().y; //Records y value from the scroll wheel.
             playerControls.PlayerHabilities.PickUp.performed += i => isPicking = i.ReadValue<float>(); //Records if player wants to pick up an object;
 
+            playerControls.UI.Pause.performed += _ => gameManager.DeterminatePause();
+
             //Debugs actions
             playerControls.DebugActions.Scene1.performed += i => scene1 = i.ReadValue<float>();
             playerControls.DebugActions.Scene2.performed += i => scene2 = i.ReadValue<float>();
@@ -87,7 +92,7 @@ public class InputManager : MonoBehaviour
     }
 
     public void HandleAllInputs(){
-
+        
         HandleMovementInput();
 
     }

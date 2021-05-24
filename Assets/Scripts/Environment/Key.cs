@@ -9,11 +9,12 @@ public class Key : MonoBehaviour
     private GameManager gm;
     public bool picked;
 
-    void Start(){
-
+    void Awake(){
         gm = FindObjectOfType<GameManager>();
+    }
+    
+    void Start(){
         picked = false;
-
     }
 
     void OnTriggerStay(Collider collider){

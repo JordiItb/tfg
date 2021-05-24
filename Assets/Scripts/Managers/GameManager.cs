@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -18,21 +19,50 @@ public class GameManager : MonoBehaviour
     PhotoreceptionSystem photoreceptionSystem;
     [Header("Debug")]
     public Text lightText;
+    public bool debug;
     public Text fpsText;
+    [Header("Main Menu")]
+    public GameObject pauseUI;
+    public GameObject mainMenu;
+    public GameObject settingsMenu;
+    public Slider gammaSlider;
+    public Slider audioSlider;
+    public GameObject quitPopup;
+    public GameObject resumeButton;
+    public GameObject mediumButton;
+    public GameObject stayButton;
     [Header("Helper Panel")]
     public Text helperText;
     public GameObject helperPanel;
     [Header("Interact Panel")]
     public GameObject interactPanel;
     public Text interactText;
-    public string intreactKey;
+    [Header("Lore Panel")]
+    public GameObject lorePanel;
+    public Text loreText;
+    [Header("End Panel")]
+    public GameObject endPanel;
+    public Text leaveText;
+    public Text stayText;
 
     bool gamepad;
     bool keyboard;
+    bool paused;
+    bool reading;
+    string intreactKey;
+    string leaveKey;
+    string concentrateKey;
+    string pulseKey;
+    string tpKey;
+    string grabKey;
+    string crouchKey;
+    string runKey;
 
     PlayerManager playerManager;
     InputManager inputManager;
+    CameraManager cameraManager;
     Volume volume;
+    LiftGammaGain gamma;
     Vignette vignette;
     
     void Awake(){
@@ -40,59 +70,114 @@ public class GameManager : MonoBehaviour
         photoreceptionSystem = FindObjectOfType<PhotoreceptionSystem>();
         playerManager = FindObjectOfType<PlayerManager>();
         inputManager = FindObjectOfType<InputManager>();
+        cameraManager = FindObjectOfType<CameraManager>();
         volume = FindObjectOfType<Volume>();
 
     }
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        volume.profile.TryGet(out vignette);
+        Time.timeScale = 1f;
+
+        if(volume != null){
+            volume.profile.TryGet(out gamma);
+        }
+
+        if(SceneManager.GetActiveScene().buildIndex == 2){
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            volume.profile.TryGet(out vignette);
+            SetSettings();
+        }else{
+            if(PlayerPrefs.HasKey("Volume")){
+                SetSettings();
+            }
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
     }
 
     void Update(){
+
+        if(debug){
+            lightText.text = "Light Value: " + photoreceptionSystem.lightValue;
+            m_FpsAccumulator++;
+            if (Time.realtimeSinceStartup > m_FpsNextPeriod){
+                m_CurrentFps = (int) (m_FpsAccumulator/fpsMeasurePeriod);
+                m_FpsAccumulator = 0;
+                m_FpsNextPeriod += fpsMeasurePeriod;
+                fpsText.text = "FPS: " + m_CurrentFps;
+            }
+        }
+
+        if(gamma != null){
+            gamma.gamma.value = new Vector4(1f, 1f, 1f, gammaSlider.value);
+        }
+
+        if(audioSlider != null){
+            AudioListener.volume = audioSlider.value;
+        }        
         
-    #if UNITY_EDITOR
+        if(SceneManager.GetActiveScene().buildIndex == 2){
+            vignette.intensity.value = (-playerManager.health / 100f) + 1f;
 
-        lightText.text = "Light Value: " + photoreceptionSystem.lightValue;
-        m_FpsAccumulator++;
-        if (Time.realtimeSinceStartup > m_FpsNextPeriod){
-            m_CurrentFps = (int) (m_FpsAccumulator/fpsMeasurePeriod);
-            m_FpsAccumulator = 0;
-            m_FpsNextPeriod += fpsMeasurePeriod;
-            fpsText.text = "FPS: " + m_CurrentFps;
+            if(playerManager.health <= 0f){
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+
+            if(Gamepad.current.IsActuated() && !gamepad){
+                intreactKey =  "[B]";
+                leaveKey = "[A]";
+                concentrateKey = "[RT]";
+                pulseKey = "[A]";
+                tpKey = "[Y]";
+                grabKey = "[X]";
+                crouchKey = "[LT]";
+                runKey = "[Left Stick]";
+                keyboard = false;
+                gamepad = true;
+            }else if(Keyboard.current.IsActuated() && !keyboard){
+                intreactKey =  "[F]";
+                leaveKey = "[E]";
+                concentrateKey = "[Space]";
+                pulseKey = "[E]";
+                tpKey = "[Right Click]";
+                grabKey = "[Left Click]";
+                crouchKey = "[Left Ctrl]";
+                runKey= "[Left Shift]";
+                gamepad = false;
+                keyboard = true;
+            }
         }
 
-        if(inputManager.scene1 == 1f){
-            SceneManager.LoadScene(0);
-        }
-        if(inputManager.scene2 == 1f){
-            SceneManager.LoadScene(1);
-        }
-    
-    #endif
-
-        vignette.intensity.value = (-playerManager.health / 100f) + 1f;
-
-        if(playerManager.health <= 0f){
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
-    if(Gamepad.current.IsActuated() && !gamepad){
-        intreactKey =  "B";
-        keyboard = false;
-        gamepad = true;
-    }else if(Keyboard.current.IsActuated() && !keyboard){
-        intreactKey =  "F";
-        gamepad = false;
-        keyboard = true;
     }
 
+    void SetSettings(){
+        AudioListener.volume = PlayerPrefs.GetFloat("Volume");
+        if(audioSlider != null && gammaSlider != null){
+            audioSlider.value = PlayerPrefs.GetFloat("Volume");
+            gammaSlider.value = PlayerPrefs.GetFloat("Gamma");
+            gamma.gamma.value = new Vector4(1f, 1f, 1f, PlayerPrefs.GetFloat("Gamma"));
+        }
     }
 
     public void setHelperText(string text){
-        
+
+        if(text.Contains("concentrateKey")){
+            text = text.Replace("concentrateKey", concentrateKey);
+        }else if(text.Contains("pulseKey")){
+            text = text.Replace("pulseKey", pulseKey);
+        }else if(text.Contains("grabKey")){
+            text = text.Replace("grabKey", grabKey);
+        }else if(text.Contains("tpKey")){
+            text = text.Replace("tpKey", tpKey);
+        }else if(text.Contains("crouchKey")){
+            text = text.Replace("crouchKey", crouchKey);
+        }else if(text.Contains("runKey")){
+            text = text.Replace("runKey", runKey);
+        }
+
         SetText(helperPanel, helperText, text);
 
     }
@@ -101,25 +186,30 @@ public class GameManager : MonoBehaviour
         
         if(obj.GetComponent<Key>()){
             
-            SetInteracText("[" + intreactKey + "] To Pick Up Key");
+            SetInteracText(intreactKey + " Pick Up Key");
             if(inputManager.isPicking == 1f){
                 obj.GetComponent<Key>().PickUp();
             }
 
         }else if(obj.GetComponent<LockedDoor>()){
 
-            SetInteracText("["+ intreactKey + "] To Open Door");
+            SetInteracText(intreactKey + " Unlock Door");
             if(inputManager.isPicking == 1f){
                 obj.GetComponent<LockedDoor>().OpenDoor();
             }
 
+        }else if(obj.GetComponent<LoreObject>()){
+
+            SetInteracText(intreactKey + " Read");
+            if(inputManager.isPicking == 1f){
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                cameraManager.locked = true;
+                SetLoreText(obj.GetComponent<LoreObject>().GetLore());
+                Time.timeScale = 0f;
+            }
+
         }
-
-    }
-
-    public void HideInteractText(){
-
-        interactPanel.SetActive(false);
 
     }
 
@@ -129,11 +219,145 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void SetLoreText(string text){
+        
+        reading = true;
+        SetText(lorePanel, loreText, text);
+
+    }
+
     void SetText(GameObject panel, Text text, string inputText){
         
         panel.SetActive(false);
         panel.SetActive(true);
         text.text = inputText;
+
+    }
+
+    public void HideLoreText(){
+        
+        Time.timeScale = 1f;
+        reading = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        AudioListener.pause = false;
+        cameraManager.locked = false;
+        lorePanel.SetActive(false);
+
+    }
+
+    public void HideInteractText(){
+
+        interactPanel.SetActive(false);
+
+    }
+
+    public void EndGame(){
+        stayText.text = intreactKey + " Stay";
+        leaveText.text = leaveKey + " Leave";
+        endPanel.SetActive(true);
+        if(inputManager.isWaving == 1f){
+            SceneManager.LoadScene(3);
+        }else if(inputManager.isPicking == 1f){
+            SceneManager.LoadScene(3);
+        }
+    }
+
+    public void HideEndGamePanel(){
+        endPanel.SetActive(false);
+    }
+
+    public void DeterminatePause(){
+        if(SceneManager.GetActiveScene().buildIndex == 2){
+            if(!reading){
+                if(paused){
+                    ResumeGame();
+                }else{
+                    PauseGame();
+                }
+            }else{
+                HideLoreText();
+            }
+        }
+    }
+
+    void PauseGame(){
+        Time.timeScale = 0f;
+        pauseUI.SetActive(true);
+        mainMenu.SetActive(true);
+        settingsMenu.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(resumeButton);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        cameraManager.locked = true;
+        paused = true;
+    }
+
+    void ResumeGame(){
+        Time.timeScale = 1f;
+        pauseUI.SetActive(false);
+        mainMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        cameraManager.locked = false;
+        paused = false;
+    }
+
+    public void StartGame(){
+        SaveSettings();
+        SceneManager.LoadScene(1);
+    }
+
+    public void StartScreen(){
+        SceneManager.LoadScene(0);
+    }
+
+    public void OptionsScreen(){
+        mainMenu.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(mediumButton);
+        settingsMenu.SetActive(true);
+    }
+
+    public void MainScreen(){
+        mainMenu.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(resumeButton);
+        settingsMenu.SetActive(false);
+    }
+
+    public void MediumQuality(){
+        QualitySettings.SetQualityLevel(1);
+    }
+
+    public void LowQuality(){
+        QualitySettings.SetQualityLevel(0);
+    }
+
+    public void HighQuality(){
+        QualitySettings.SetQualityLevel(2);
+    }
+
+    public void ShowQuitPopUp(){
+        if(quitPopup.activeSelf){
+            mainMenu.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(resumeButton);
+            quitPopup.SetActive(false);
+        }else{
+            mainMenu.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(stayButton);
+            quitPopup.SetActive(true);
+        } 
+    }
+
+    public void QuitGame(){
+        Application.Quit();
+    }
+
+    void SaveSettings(){
+        
+        PlayerPrefs.SetFloat("Gamma", gammaSlider.value);
+        PlayerPrefs.SetFloat("Volume", audioSlider.value);
+        PlayerPrefs.Save();
 
     }
 
