@@ -13,7 +13,7 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
-        if(inputManager.moveAmount > 0f && !currentStepSound.isPlaying){
+        if(inputManager.moveAmount > 0f && !currentStepSound.isPlaying && inputManager.isConcentrating == 0f){
             if(inputManager.isRunning == 1f && inputManager.isCrouching == 0f){
                 currentStepSound.pitch = 1.5f;
             }else if(inputManager.isCrouching == 1f){

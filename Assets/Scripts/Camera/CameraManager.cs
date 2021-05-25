@@ -75,7 +75,7 @@ public class CameraManager : MonoBehaviour
 
         Vector3 rotation;
         Quaternion targetRotation;
-        if(Gamepad.current.IsActuated()){
+        if(Gamepad.current != null && Gamepad.current.IsActuated()){
             lookAngle = lookAngle + (inputManager.cameraInputX * cameraLookSpeed * 10f);
             pivotAngle = pivotAngle - (inputManager.cameraInputY * cameraPivotSpeed * 10f);
         }

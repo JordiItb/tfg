@@ -5,13 +5,20 @@ using UnityEngine;
 public class ArtificialLightManager : MonoBehaviour
 {
 
+    public AudioSource breakSound;
+
     void OnCollisionEnter(Collision collision){
 
-        if(collision.collider.CompareTag("Interactuable") || collision.collider.GetComponent<EnemyAI>() && GetComponent<Light>().enabled == true){
+        if(collision.collider.CompareTag("Interactuable") || collision.collider.GetComponent<EnemyAI>()){
 
-            GetComponent<ParticleSystem>().Play(true);
+            if(GetComponent<Light>().enabled == true){
+                GetComponent<ParticleSystem>().Play(true);
 
-            GetComponent<Light>().enabled = false;
+                breakSound.Play();
+
+                GetComponent<Light>().enabled = false;
+            }
+
         }
 
     }

@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
 
-            if(Gamepad.current.IsActuated() && !gamepad){
+            if(Gamepad.current != null && Gamepad.current.IsActuated() && !gamepad){
                 intreactKey =  "[B]";
                 leaveKey = "[A]";
                 concentrateKey = "[RT]";

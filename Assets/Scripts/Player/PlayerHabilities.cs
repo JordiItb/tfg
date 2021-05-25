@@ -79,6 +79,10 @@ public class PlayerHabilities : MonoBehaviour
                     if(!grabbing){
                         //Checks if the object is interactuable.
                         if(hit.collider.CompareTag("Interactuable") || hit.collider.GetComponent<EnemyAI>()){
+                            //Fixes visual multi selection.
+                            if(hit.collider.gameObject != hitObject && hitObject != null){
+                                hitObject.GetComponent<MeshRenderer>().material = defMat;
+                            }
 
                             particles[2].Stop();
 
@@ -161,7 +165,7 @@ public class PlayerHabilities : MonoBehaviour
 
     public void Grabbing(GameObject grabObj){
         
-        if(grabObj.GetComponent<Rigidbody>().mass <= 1f){
+        if(grabObj != null && grabObj.GetComponent<Rigidbody>().mass <= 1f){
             //Grabbing object.
             if(inputManager.isGrabbing == 1f && grabObj != null){
 
