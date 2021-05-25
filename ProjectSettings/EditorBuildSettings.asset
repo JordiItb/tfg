@@ -18,9 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CreditScene.unity
     guid: 16b586b09c6be8241ad3ca806082e8ba
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: f98e604a89a9c0a4f9f01186fddef84e,
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: ff3ef29fb1da0ea4d91cb1cfafcef1c5,
       type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 2c43a486d674129428a43143a12611ed,
       type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: ae546a9e16a1dd04ab7a548c291780e5,
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: eb96f5a74d05279479b71c9657f9e49e,
       type: 2}

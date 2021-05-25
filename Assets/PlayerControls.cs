@@ -164,6 +164,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""73ba909c-01b1-457e-89c1-17be6d88e57a"",
+                    ""path"": ""<OpenVROculusTouchController>{LeftHand}/thumbstick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""5c52f058-1141-4e87-aa72-b4fc719d43c0"",
                     ""path"": ""<XRController>{LeftHand}/Primary2DAxis"",
                     ""interactions"": """",

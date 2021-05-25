@@ -40,10 +40,13 @@ public class GameManager : MonoBehaviour
     [Header("Lore Panel")]
     public GameObject lorePanel;
     public Text loreText;
+    public GameObject closeButton;
     [Header("End Panel")]
     public GameObject endPanel;
     public Text leaveText;
     public Text stayText;
+    [Header("Death Screen")]
+    public GameObject deathPanel;
 
     bool gamepad;
     bool keyboard;
@@ -123,7 +126,7 @@ public class GameManager : MonoBehaviour
             vignette.intensity.value = (-playerManager.health / 100f) + 1f;
 
             if(playerManager.health <= 0f){
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                DeathScreen();
             }
 
             if(Gamepad.current != null && Gamepad.current.IsActuated() && !gamepad){
@@ -213,6 +216,13 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void DeathScreen(){
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        deathPanel.SetActive(true);
+    }
+
     void SetInteracText(string text){
 
         SetText(interactPanel, interactText, text);
@@ -223,6 +233,7 @@ public class GameManager : MonoBehaviour
         
         reading = true;
         SetText(lorePanel, loreText, text);
+        EventSystem.current.SetSelectedGameObject(closeButton);
 
     }
 
@@ -298,6 +309,7 @@ public class GameManager : MonoBehaviour
         pauseUI.SetActive(false);
         mainMenu.SetActive(false);
         settingsMenu.SetActive(false);
+        quitPopup.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         cameraManager.locked = false;
