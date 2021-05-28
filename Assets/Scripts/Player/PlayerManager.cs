@@ -90,6 +90,9 @@ public class PlayerManager : MonoBehaviour
         }else if(collider.gameObject.tag == "Tutorial"){
             gameManager.setHelperText(collider.GetComponent<Tutorial>().GetText());
             Destroy(collider.gameObject);
+        }else if(collider.gameObject.tag == "CheckPoint"){
+            gameManager.SetCheckPoint();
+            Destroy(collider.gameObject);
         }
     }
 }

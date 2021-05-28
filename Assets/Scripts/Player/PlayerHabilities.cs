@@ -237,6 +237,7 @@ public class PlayerHabilities : MonoBehaviour
             //Checks if the object is an enemy.
             }else if(obj.GetComponent<EnemyAI>()){
                 obj.GetComponentInChildren<Light>().enabled = false;
+                obj.GetComponentInParent<Animator>().enabled = false;
                 obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 obj.GetComponent<EnemyAI>().enabled = false;
                 ThrowObject(obj);

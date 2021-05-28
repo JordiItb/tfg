@@ -158,7 +158,8 @@ public class InputManager : MonoBehaviour
         }
 
         if(photoreceptionSystem.lightValue >= 0.05f){
-            moveAmount = moveAmount / photoreceptionSystem.lightValue * speedMultiplier;
+            float lightClampedValue = Mathf.Clamp(photoreceptionSystem.lightValue, 0f, 0.1f);
+            moveAmount = moveAmount / lightClampedValue * speedMultiplier;
         }
 
         animatorManager.UpdateAnimatorValues(0, moveAmount, crouch, concentrating);

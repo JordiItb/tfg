@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 public class CameraManager : MonoBehaviour
 {
     InputManager inputManager;
+    public bool locked;
+    public float fov;
     [Header("Positions")]
     public Transform targetTransform; //The object the camera will follow.
     public Transform cameraConcentrate; //The point the camera will go when concentrating.
@@ -31,8 +33,6 @@ public class CameraManager : MonoBehaviour
     public float maximumPivotAngle;
     public float concentrationMinimumPivotAngle;
     public float concentrationMaximumPivotAngle;
-
-    public bool locked;
 
 
     private void Awake(){
@@ -60,9 +60,11 @@ public class CameraManager : MonoBehaviour
 
         if(inputManager.isConcentrating == 0){
             targetTransform = auxTrans;
+            Camera.main.fieldOfView = 60f;
             cameraFollowSpeed = 0.2f;
         }else{
             targetTransform = cameraConcentrate;
+            Camera.main.fieldOfView = fov;
             cameraFollowSpeed = 0f;
         }
 

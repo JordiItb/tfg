@@ -16,7 +16,7 @@ public class TrajectoryManager : MonoBehaviour
 
     void OnTriggerEnter(Collider collider){
 
-        if(!collider.gameObject.CompareTag("Interactuable") && collider.gameObject.name != "Parabola Particles(Clone)"){
+        if(!collider.gameObject.CompareTag("Interactuable") && collider.gameObject.name != "Parabola Particles(Clone)" && collider.gameObject.name != "Drone"){
 
             GetComponent<MeshRenderer>().enabled = false;
 

@@ -6,7 +6,6 @@ public class EnemyAI : MonoBehaviour
 {
 
     public Transform[] trackPoints;
-    public GameObject target;
     public float walkSpeed;
     public float rotationSpeed;
     int currentPoint;
@@ -15,7 +14,6 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         currentPoint = 0;
-        target = GameObject.Find("Player");
     }
 
     

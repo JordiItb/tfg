@@ -396,6 +396,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""bea8c92f-25b9-48ae-8a44-86a7be4a00e6"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""15d03c36-4e4b-4f68-a91a-174834418c57"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",

@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     InputManager inputManager;
     CameraManager cameraManager;
     Volume volume;
+    ChromaticAberration chromaticAberration;
     LiftGammaGain gamma;
     Vignette vignette;
     
@@ -86,10 +87,19 @@ public class GameManager : MonoBehaviour
             volume.profile.TryGet(out gamma);
         }
 
+        if(SceneManager.GetActiveScene().buildIndex == 0 && PlayerPrefs.HasKey("playerPosX")){
+            DeleteCheckPoints();
+        }
+
         if(SceneManager.GetActiveScene().buildIndex == 2){
+            if(PlayerPrefs.HasKey("playerPosX")){
+                playerManager.transform.position = new Vector3(PlayerPrefs.GetFloat("playerPosX"), PlayerPrefs.GetFloat("playerPosY"), PlayerPrefs.GetFloat("playerPosZ"));
+                cameraManager.gameObject.transform.position = new Vector3(PlayerPrefs.GetFloat("playerPosX"), PlayerPrefs.GetFloat("playerPosY"), PlayerPrefs.GetFloat("playerPosZ"));
+            }
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             volume.profile.TryGet(out vignette);
+            volume.profile.TryGet(out chromaticAberration);
             SetSettings();
         }else{
             if(PlayerPrefs.HasKey("Volume")){
@@ -124,6 +134,7 @@ public class GameManager : MonoBehaviour
         
         if(SceneManager.GetActiveScene().buildIndex == 2){
             vignette.intensity.value = (-playerManager.health / 100f) + 1f;
+            chromaticAberration.intensity.value = (-playerManager.health / 100f) + 1f;
 
             if(playerManager.health <= 0f){
                 DeathScreen();
@@ -140,7 +151,7 @@ public class GameManager : MonoBehaviour
                 runKey = "[Left Stick]";
                 keyboard = false;
                 gamepad = true;
-            }else if(Keyboard.current.IsActuated() && !keyboard){
+            }else if(Keyboard.current.IsActuated() || Mouse.current.IsActuated() && !keyboard){
                 intreactKey =  "[F]";
                 leaveKey = "[E]";
                 concentrateKey = "[Space]";
@@ -169,15 +180,20 @@ public class GameManager : MonoBehaviour
 
         if(text.Contains("concentrateKey")){
             text = text.Replace("concentrateKey", concentrateKey);
-        }else if(text.Contains("pulseKey")){
+        }
+        if(text.Contains("pulseKey")){
             text = text.Replace("pulseKey", pulseKey);
-        }else if(text.Contains("grabKey")){
+        }
+        if(text.Contains("grabKey")){
             text = text.Replace("grabKey", grabKey);
-        }else if(text.Contains("tpKey")){
+        }
+        if(text.Contains("tpKey")){
             text = text.Replace("tpKey", tpKey);
-        }else if(text.Contains("crouchKey")){
+        }
+        if(text.Contains("crouchKey")){
             text = text.Replace("crouchKey", crouchKey);
-        }else if(text.Contains("runKey")){
+        }
+        if(text.Contains("runKey")){
             text = text.Replace("runKey", runKey);
         }
 
@@ -218,6 +234,7 @@ public class GameManager : MonoBehaviour
 
     void DeathScreen(){
         Time.timeScale = 0f;
+        playerManager.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         deathPanel.SetActive(true);
@@ -314,6 +331,24 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         cameraManager.locked = false;
         paused = false;
+    }
+
+    public void SetCheckPoint(){
+
+        if(PlayerPrefs.HasKey("playerPosX")){
+            DeleteCheckPoints();
+        }
+
+        PlayerPrefs.SetFloat("playerPosX", playerManager.gameObject.transform.position.x);
+        PlayerPrefs.SetFloat("playerPosY", playerManager.gameObject.transform.position.y);
+        PlayerPrefs.SetFloat("playerPosZ", playerManager.gameObject.transform.position.z);
+        PlayerPrefs.Save();
+    }
+
+    void DeleteCheckPoints(){
+        PlayerPrefs.DeleteKey("playerPosX");
+        PlayerPrefs.DeleteKey("playerPosY");
+        PlayerPrefs.DeleteKey("playerPosZ");
     }
 
     public void StartGame(){

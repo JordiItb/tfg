@@ -120,8 +120,8 @@ public class PlayerLocomotion : MonoBehaviour
                     Vector3 movementVelocity;
                     #endregion
                     if(photoreception.lightValue >= 0.05f){
-   
-                        movementVelocity = moveDirection / photoreception.lightValue * speedMultiplier;
+                        float lightClampedValue = Mathf.Clamp(photoreception.lightValue, 0f, 0.1f);   
+                        movementVelocity = moveDirection / lightClampedValue * speedMultiplier;
                     }else{
                         movementVelocity = moveDirection;
                     }
